@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.nothingwidgets" path="/org/gnome/shell/extensions/nothingwidgets/">
+    <key name="widget-x" type="i">
+      <default>120</default>
+      <summary>Date widget X position</summary>
+      <description>Horizontal pixel position for the date widget.</description>
+    </key>
+    <key name="widget-y" type="i">
+      <default>120</default>
+      <summary>Date widget Y position</summary>
+      <description>Vertical pixel position for the date widget.</description>
+    </key>
+    <key name="widget-width" type="i">
+      <range min="150" max="420"/>
+      <default>220</default>
+      <summary>Date widget width</summary>
+      <description>Width in pixels for the date widget.</description>
+    </key>
+    <key name="widget-height" type="i">
+      <range min="150" max="420"/>
+      <default>220</default>
+      <summary>Date widget height</summary>
+      <description>Height in pixels for the date widget.</description>
+    </key>
+    <key name="clock-x" type="i">
+      <default>380</default>
+      <summary>Digital clock X position</summary>
+      <description>Horizontal pixel position for the digital clock widget.</description>
+    </key>
+    <key name="clock-y" type="i">
+      <default>120</default>
+      <summary>Digital clock Y position</summary>
+      <description>Vertical pixel position for the digital clock widget.</description>
+    </key>
+    <key name="clock-width" type="i">
+      <range min="180" max="560"/>
+      <default>340</default>
+      <summary>Digital clock width</summary>
+      <description>Width in pixels for the digital clock widget.</description>
+    </key>
+    <key name="clock-height" type="i">
+      <range min="110" max="360"/>
+      <default>160</default>
+      <summary>Digital clock height</summary>
+      <description>Height in pixels for the digital clock widget.</description>
+    </key>
+    <key name="clock-use-24-hour" type="b">
+      <default>true</default>
+      <summary>Use 24-hour time</summary>
+      <description>Uses 24-hour time for the digital clock widget.</description>
+    </key>
+    <key name="clock-widget-variant" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>Digital clock variant</summary>
+      <description>0 = Digital clock, 1 = World clock.</description>
+    </key>
+    <key name="world-clock-time-zone" type="s">
+      <default>'America/New_York'</default>
+      <summary>World clock time zone</summary>
+      <description>IANA time zone identifier for the world clock variant.</description>
+    </key>
+    <key name="world-clock-city-name" type="s">
+      <default>'New York'</default>
+      <summary>World clock city name</summary>
+      <description>Display city name for the world clock variant.</description>
+    </key>
+    <key name="large-clock-x" type="i">
+      <default>120</default>
+      <summary>Large digital clock X position</summary>
+      <description>Horizontal pixel position for the large digital clock widget.</description>
+    </key>
+    <key name="large-clock-y" type="i">
+      <default>370</default>
+      <summary>Large digital clock Y position</summary>
+      <description>Vertical pixel position for the large digital clock widget.</description>
+    </key>
+    <key name="large-clock-width" type="i">
+      <range min="300" max="760"/>
+      <default>470</default>
+      <summary>Large digital clock width</summary>
+      <description>Width in pixels for the large digital clock widget.</description>
+    </key>
+    <key name="large-clock-height" type="i">
+      <range min="130" max="320"/>
+      <default>190</default>
+      <summary>Large digital clock height</summary>
+      <description>Height in pixels for the large digital clock widget.</description>
+    </key>
+    <key name="large-clock-show-date" type="b">
+      <default>true</default>
+      <summary>Show date on large digital clock</summary>
+      <description>Shows the date above the time on the large digital clock widget.</description>
+    </key>
+    <key name="analog-clock-x" type="i">
+      <default>640</default>
+      <summary>Analog clock X position</summary>
+      <description>Horizontal pixel position for the analog clock widget.</description>
+    </key>
+    <key name="analog-clock-y" type="i">
+      <default>360</default>
+      <summary>Analog clock Y position</summary>
+      <description>Vertical pixel position for the analog clock widget.</description>
+    </key>
+    <key name="analog-clock-width" type="i">
+      <range min="160" max="520"/>
+      <default>240</default>
+      <summary>Analog clock width</summary>
+      <description>Width in pixels for the analog clock widget.</description>
+    </key>
+    <key name="analog-clock-height" type="i">
+      <range min="160" max="520"/>
+      <default>240</default>
+      <summary>Analog clock height</summary>
+      <description>Height in pixels for the analog clock widget.</description>
+    </key>
+    <key name="analog-clock-style" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>Analog clock style</summary>
+      <description>0 = Swiss railway, 1 = Minimalist.</description>
+    </key>
+    <key name="photo-x" type="i">
+      <default>920</default>
+      <summary>Photo widget X position</summary>
+      <description>Horizontal pixel position for the photo widget.</description>
+    </key>
+    <key name="photo-y" type="i">
+      <default>360</default>
+      <summary>Photo widget Y position</summary>
+      <description>Vertical pixel position for the photo widget.</description>
+    </key>
+    <key name="photo-width" type="i">
+      <range min="140" max="720"/>
+      <default>240</default>
+      <summary>Photo widget width</summary>
+      <description>Width in pixels for the photo widget.</description>
+    </key>
+    <key name="photo-height" type="i">
+      <range min="140" max="720"/>
+      <default>240</default>
+      <summary>Photo widget height</summary>
+      <description>Height in pixels for the photo widget.</description>
+    </key>
+    <key name="photo-image-path" type="s">
+      <default>'assets/photo/sample.jpeg'</default>
+      <summary>Photo image path</summary>
+      <description>Absolute, file URI, or extension-relative path to the image shown in the photo widget.</description>
+    </key>
+    <key name="photo-border-enabled" type="b">
+      <default>false</default>
+      <summary>Photo border enabled</summary>
+      <description>Adds a frame around the photo.</description>
+    </key>
+    <key name="photo-border-size" type="i">
+      <range min="0" max="48"/>
+      <default>10</default>
+      <summary>Photo border size</summary>
+      <description>Frame thickness in pixels for the photo widget.</description>
+    </key>
+    <key name="photo-pill-shape-enabled" type="b">
+      <default>false</default>
+      <summary>Photo pill shape enabled</summary>
+      <description>Uses circle or pill rounding for the photo widget.</description>
+    </key>
+    <key name="photo-image-fill-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Photo image fill mode</summary>
+      <description>0 = Crop, 1 = Fit, 2 = Stretch.</description>
+    </key>
+    <key name="photo-grayscale-enabled" type="b">
+      <default>false</default>
+      <summary>Photo grayscale enabled</summary>
+      <description>Desaturates the photo image.</description>
+    </key>
+    <key name="weather-x" type="i">
+      <default>1180</default>
+      <summary>Weather widget X position</summary>
+      <description>Horizontal pixel position for the weather widget.</description>
+    </key>
+    <key name="weather-y" type="i">
+      <default>360</default>
+      <summary>Weather widget Y position</summary>
+      <description>Vertical pixel position for the weather widget.</description>
+    </key>
+    <key name="weather-width" type="i">
+      <range min="190" max="680"/>
+      <default>260</default>
+      <summary>Weather widget width</summary>
+      <description>Width in pixels for the weather widget.</description>
+    </key>
+    <key name="weather-height" type="i">
+      <range min="160" max="420"/>
+      <default>220</default>
+      <summary>Weather widget height</summary>
+      <description>Height in pixels for the weather widget.</description>
+    </key>
+    <key name="weather-location" type="s">
+      <default>''</default>
+      <summary>Legacy weather location query</summary>
+      <description>Legacy free-form location query kept for compatibility with older extension versions.</description>
+    </key>
+    <key name="weather-location-name" type="s">
+      <default>''</default>
+      <summary>Weather location name</summary>
+      <description>Display name selected from Open-Meteo geocoding.</description>
+    </key>
+    <key name="weather-latitude" type="d">
+      <default>0.0</default>
+      <summary>Weather latitude</summary>
+      <description>Latitude selected from Open-Meteo geocoding.</description>
+    </key>
+    <key name="weather-longitude" type="d">
+      <default>0.0</default>
+      <summary>Weather longitude</summary>
+      <description>Longitude selected from Open-Meteo geocoding.</description>
+    </key>
+    <key name="weather-time-zone" type="s">
+      <default>''</default>
+      <summary>Weather time zone</summary>
+      <description>IANA time zone returned by Open-Meteo geocoding for the selected weather location.</description>
+    </key>
+    <key name="weather-temperature-unit" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>Weather temperature unit</summary>
+      <description>0 = Celsius, 1 = Fahrenheit.</description>
+    </key>
+    <key name="media-x" type="i">
+      <default>1180</default>
+      <summary>Media widget X position</summary>
+      <description>Horizontal pixel position for the media widget.</description>
+    </key>
+    <key name="media-y" type="i">
+      <default>620</default>
+      <summary>Media widget Y position</summary>
+      <description>Vertical pixel position for the media widget.</description>
+    </key>
+    <key name="media-width" type="i">
+      <range min="260" max="760"/>
+      <default>360</default>
+      <summary>Media widget width</summary>
+      <description>Width in pixels for the media widget.</description>
+    </key>
+    <key name="media-height" type="i">
+      <range min="170" max="420"/>
+      <default>220</default>
+      <summary>Media widget height</summary>
+      <description>Height in pixels for the media widget.</description>
+    </key>
+    <key name="system-x" type="i">
+      <default>820</default>
+      <summary>System monitor widget X position</summary>
+      <description>Horizontal pixel position for the system monitor widget.</description>
+    </key>
+    <key name="system-y" type="i">
+      <default>620</default>
+      <summary>System monitor widget Y position</summary>
+      <description>Vertical pixel position for the system monitor widget.</description>
+    </key>
+    <key name="system-width" type="i">
+      <range min="250" max="720"/>
+      <default>330</default>
+      <summary>System monitor widget width</summary>
+      <description>Width in pixels for the system monitor widget.</description>
+    </key>
+    <key name="system-height" type="i">
+      <range min="180" max="430"/>
+      <default>230</default>
+      <summary>System monitor widget height</summary>
+      <description>Height in pixels for the system monitor widget.</description>
+    </key>
+    <key name="system-monitor-style" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>System monitor style</summary>
+      <description>0 = number list, 1 = hollow chart grid.</description>
+    </key>
+    <key name="theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="use-system-accent" type="b">
+      <default>false</default>
+      <summary>Use system accent</summary>
+      <description>Uses the GNOME accent color instead of Nothing red for highlights.</description>
+    </key>
+  </schema>
+</schemalist>

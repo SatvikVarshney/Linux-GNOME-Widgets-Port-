@@ -1,0 +1,598 @@
+@font-face {
+    font-family: "NothingNType";
+    src: url("assets/fonts/ntype82-regular.otf");
+}
+
+@font-face {
+    font-family: "NothingNDot";
+    src: url("assets/fonts/ndot.ttf");
+}
+
+.nothing-date-widget {
+    padding: 10px;
+}
+
+.nothing-digital-clock-widget {
+    padding: 10px;
+}
+
+.nothing-large-clock-widget {
+    padding: 10px;
+}
+
+.nothing-analog-clock-widget {
+    padding: 10px;
+}
+
+.nothing-photo-widget {
+    padding: 10px;
+}
+
+.nothing-weather-widget {
+    padding: 10px;
+}
+
+.nothing-media-widget {
+    padding: 10px;
+}
+
+.nothing-system-widget {
+    padding: 10px;
+}
+
+.nothing-date-widget:hover .nothing-date-resize-handle,
+.nothing-digital-clock-widget:hover .nothing-widget-resize-handle,
+.nothing-large-clock-widget:hover .nothing-widget-resize-handle,
+.nothing-analog-clock-widget:hover .nothing-widget-resize-handle,
+.nothing-photo-widget:hover .nothing-widget-resize-handle,
+.nothing-weather-widget:hover .nothing-widget-resize-handle,
+.nothing-media-widget:hover .nothing-widget-resize-handle,
+.nothing-system-widget:hover .nothing-widget-resize-handle {
+    opacity: 255;
+}
+
+.nothing-date-card {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+    padding: 14px 16px 8px 16px;
+}
+
+.nothing-date-resize-handle {
+    border-right: 3px solid rgba(255, 255, 255, 0.45);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.45);
+    border-radius: 0 0 12px 0;
+    margin: 0 10px 10px 0;
+    opacity: 80;
+}
+
+.nothing-widget-resize-handle {
+    border-right: 3px solid rgba(255, 255, 255, 0.45);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.45);
+    border-radius: 0 0 12px 0;
+    margin: 0 10px 10px 0;
+    opacity: 80;
+}
+
+.nothing-digital-clock-card {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+    padding: 18px;
+}
+
+.nothing-digital-clock-digit {
+    font-family: "NothingNDot", "Cantarell", sans-serif;
+    color: #ffffff;
+    text-align: center;
+}
+
+.nothing-digital-clock-dot {
+    background-color: #ffffff;
+}
+
+.nothing-large-clock-content {
+    spacing: 0;
+}
+
+.nothing-large-clock-date {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    opacity: 230;
+}
+
+.nothing-large-clock-time {
+    font-family: "NothingNDot", "Cantarell", sans-serif;
+    color: #ffffff;
+}
+
+.nothing-world-clock-full,
+.nothing-world-clock-compact {
+    padding: 4px;
+}
+
+.nothing-world-clock-city,
+.nothing-world-clock-meta,
+.nothing-world-clock-abbrev {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ff4444;
+    font-weight: 700;
+}
+
+.nothing-world-clock-meta {
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 500;
+}
+
+.nothing-world-clock-time,
+.nothing-world-clock-compact-digit {
+    font-family: "NothingNDot", "Cantarell", sans-serif;
+    color: #ffffff;
+}
+
+.nothing-analog-clock-face {
+    background-color: rgba(26, 26, 26, 0.95);
+}
+
+.nothing-analog-clock-marker {
+    background-color: #ffffff;
+}
+
+.nothing-analog-clock-hand {
+    background-color: #ffffff;
+}
+
+.nothing-analog-clock-widget.minimal .nothing-analog-clock-hand.hour {
+    background-color: rgba(255, 255, 255, 0.82);
+}
+
+.nothing-analog-clock-widget.minimal .nothing-analog-clock-hand.minute {
+    background-color: rgba(190, 190, 190, 0.92);
+}
+
+.nothing-analog-clock-hand.second,
+.nothing-analog-clock-second-dot {
+    background-color: #ff4444;
+}
+
+.nothing-analog-clock-second-dot,
+.nothing-analog-clock-center-dot {
+    border-radius: 999px;
+}
+
+.nothing-analog-clock-center-dot {
+    background-color: #ffffff;
+}
+
+.nothing-photo-frame {
+    background-color: rgba(26, 26, 26, 0.95);
+}
+
+.nothing-photo-content {
+    background-color: rgba(18, 18, 18, 1);
+}
+
+.nothing-photo-placeholder {
+    spacing: 10px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.nothing-photo-placeholder-icon {
+    icon-size: 42px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.nothing-photo-placeholder-title {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.nothing-photo-placeholder-subtitle {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.nothing-weather-card {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+    padding: 18px;
+}
+
+.nothing-weather-top-row {
+    spacing: 12px;
+}
+
+.nothing-weather-symbol {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ff4444;
+}
+
+.nothing-weather-temperature {
+    font-family: "NothingNDot", "Cantarell", sans-serif;
+    color: #ffffff;
+}
+
+.nothing-weather-location {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 700;
+}
+
+.nothing-weather-condition {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.nothing-weather-high-low,
+.nothing-weather-status {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.nothing-media-card {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+}
+
+.nothing-media-art-frame {
+    background-color: rgba(18, 18, 18, 1);
+    border-radius: 16px;
+}
+
+.nothing-media-art-fallback {
+    color: rgba(255, 255, 255, 0.44);
+}
+
+.nothing-media-info {
+    spacing: 6px;
+}
+
+.nothing-media-player {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ff4444;
+    font-weight: 700;
+}
+
+.nothing-media-title {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.nothing-media-artist,
+.nothing-media-time {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.nothing-media-progress-box {
+    spacing: 6px;
+}
+
+.nothing-media-progress-track {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+}
+
+.nothing-media-progress-fill {
+    background-color: #ffffff;
+    border-radius: 999px;
+}
+
+.nothing-media-controls {
+    spacing: 10px;
+}
+
+.nothing-media-button {
+    background-color: rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.90);
+}
+
+.nothing-media-button.primary {
+    background-color: rgba(255, 68, 68, 0.92);
+    color: #ffffff;
+}
+
+.nothing-media-button-icon {
+    icon-size: 16px;
+}
+
+.nothing-system-card {
+    background-color: rgba(26, 26, 26, 0.95);
+    border-radius: 20px;
+}
+
+.nothing-system-header {
+    spacing: 10px;
+}
+
+.nothing-system-title {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ff4444;
+    font-weight: 800;
+}
+
+.nothing-system-subtitle {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 700;
+}
+
+.nothing-system-row {
+    spacing: 4px;
+}
+
+.nothing-system-list {
+    spacing: 8px;
+}
+
+.nothing-system-row-header {
+    spacing: 8px;
+}
+
+.nothing-system-row-title {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.58);
+    font-weight: 700;
+}
+
+.nothing-system-row-value {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.nothing-system-progress-track {
+    background-color: rgba(255, 255, 255, 0.13);
+    border-radius: 999px;
+}
+
+.nothing-system-progress-fill {
+    background-color: #ffffff;
+    border-radius: 999px;
+}
+
+.nothing-system-chart-grid {
+    spacing: 8px;
+}
+
+.nothing-system-chart-row {
+    spacing: 10px;
+}
+
+.nothing-system-chart {
+    spacing: 5px;
+}
+
+.nothing-system-chart-value {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.nothing-system-chart-title {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    color: rgba(255, 255, 255, 0.58);
+    font-weight: 700;
+}
+
+.nothing-date-day {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    font-size: 25px;
+    color: #ff4444;
+    margin-bottom: 6px;
+}
+
+.nothing-date-number {
+    font-family: "NothingNType", "Cantarell", sans-serif;
+    font-size: 106px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -2px;
+}
+
+.nothing-date-widget.theme-light .nothing-date-card {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-digital-clock-card {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-date-widget.theme-light .nothing-date-number {
+    color: #1a1a1a;
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-digital-clock-digit {
+    color: #1a1a1a;
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-digital-clock-dot {
+    background-color: #1a1a1a;
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-world-clock-time,
+.nothing-digital-clock-widget.theme-light .nothing-world-clock-compact-digit,
+.nothing-large-clock-widget.theme-light .nothing-large-clock-date,
+.nothing-large-clock-widget.theme-light .nothing-large-clock-time {
+    color: #1a1a1a;
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-world-clock-meta {
+    color: rgba(26, 26, 26, 0.62);
+}
+
+.nothing-digital-clock-widget.theme-light .nothing-world-clock-city,
+.nothing-digital-clock-widget.theme-light .nothing-world-clock-abbrev {
+    color: #d92d2d;
+}
+
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-face {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-marker,
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-hand,
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-center-dot {
+    background-color: #1a1a1a;
+}
+
+.nothing-analog-clock-widget.theme-light.minimal .nothing-analog-clock-hand.hour {
+    background-color: rgba(26, 26, 26, 0.82);
+}
+
+.nothing-analog-clock-widget.theme-light.minimal .nothing-analog-clock-hand.minute {
+    background-color: rgba(85, 85, 85, 0.82);
+}
+
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.theme-light .nothing-analog-clock-second-dot {
+    background-color: #d92d2d;
+}
+
+.nothing-photo-widget.theme-light .nothing-photo-frame {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-photo-widget.theme-light .nothing-photo-content {
+    background-color: rgba(226, 226, 226, 1);
+}
+
+.nothing-photo-widget.theme-light .nothing-photo-placeholder-icon,
+.nothing-photo-widget.theme-light .nothing-photo-placeholder-title,
+.nothing-photo-widget.theme-light .nothing-photo-placeholder-subtitle {
+    color: rgba(26, 26, 26, 0.54);
+}
+
+.nothing-weather-widget.theme-light .nothing-weather-card {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-weather-widget.theme-light .nothing-weather-temperature,
+.nothing-weather-widget.theme-light .nothing-weather-condition {
+    color: #1a1a1a;
+}
+
+.nothing-weather-widget.theme-light .nothing-weather-location,
+.nothing-weather-widget.theme-light .nothing-weather-high-low,
+.nothing-weather-widget.theme-light .nothing-weather-status {
+    color: rgba(26, 26, 26, 0.62);
+}
+
+.nothing-weather-widget.theme-light .nothing-weather-symbol {
+    color: #d92d2d;
+}
+
+.nothing-media-widget.theme-light .nothing-media-card {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-media-widget.theme-light .nothing-media-art-frame {
+    background-color: rgba(226, 226, 226, 1);
+}
+
+.nothing-media-widget.theme-light .nothing-media-title {
+    color: #1a1a1a;
+}
+
+.nothing-media-widget.theme-light .nothing-media-player {
+    color: #d92d2d;
+}
+
+.nothing-media-widget.theme-light .nothing-media-artist,
+.nothing-media-widget.theme-light .nothing-media-time,
+.nothing-media-widget.theme-light .nothing-media-art-fallback {
+    color: rgba(26, 26, 26, 0.60);
+}
+
+.nothing-media-widget.theme-light .nothing-media-progress-track,
+.nothing-media-widget.theme-light .nothing-media-button {
+    background-color: rgba(26, 26, 26, 0.12);
+    color: rgba(26, 26, 26, 0.86);
+}
+
+.nothing-media-widget.theme-light .nothing-media-progress-fill {
+    background-color: #1a1a1a;
+}
+
+.nothing-media-widget.theme-light .nothing-media-button.primary {
+    background-color: rgba(217, 45, 45, 0.92);
+    color: #ffffff;
+}
+
+.nothing-system-widget.theme-light .nothing-system-card {
+    background-color: rgba(245, 245, 245, 0.96);
+}
+
+.nothing-system-widget.theme-light .nothing-system-title {
+    color: #d92d2d;
+}
+
+.nothing-system-widget.theme-light .nothing-system-subtitle,
+.nothing-system-widget.theme-light .nothing-system-row-title {
+    color: rgba(26, 26, 26, 0.56);
+}
+
+.nothing-system-widget.theme-light .nothing-system-row-value {
+    color: #1a1a1a;
+}
+
+.nothing-system-widget.theme-light .nothing-system-chart-value {
+    color: #1a1a1a;
+}
+
+.nothing-system-widget.theme-light .nothing-system-chart-title {
+    color: rgba(26, 26, 26, 0.56);
+}
+
+.nothing-system-widget.theme-light .nothing-system-progress-track {
+    background-color: rgba(26, 26, 26, 0.12);
+}
+
+.nothing-system-widget.theme-light .nothing-system-progress-fill {
+    background-color: #1a1a1a;
+}
+
+.nothing-date-widget.theme-light .nothing-date-resize-handle,
+.nothing-digital-clock-widget.theme-light .nothing-widget-resize-handle,
+.nothing-large-clock-widget.theme-light .nothing-widget-resize-handle,
+.nothing-analog-clock-widget.theme-light .nothing-widget-resize-handle,
+.nothing-photo-widget.theme-light .nothing-widget-resize-handle,
+.nothing-weather-widget.theme-light .nothing-widget-resize-handle,
+.nothing-media-widget.theme-light .nothing-widget-resize-handle,
+.nothing-system-widget.theme-light .nothing-widget-resize-handle {
+    border-color: rgba(26, 26, 26, 0.35);
+}
+
+.nothing-date-widget.use-system-accent .nothing-date-day,
+.nothing-digital-clock-widget.use-system-accent .nothing-world-clock-city,
+.nothing-digital-clock-widget.use-system-accent .nothing-world-clock-abbrev {
+    color: @theme_selected_bg_color;
+}
+
+.nothing-analog-clock-widget.use-system-accent .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.use-system-accent .nothing-analog-clock-second-dot {
+    background-color: @theme_selected_bg_color;
+}
+
+.nothing-weather-widget.use-system-accent .nothing-weather-symbol {
+    color: @theme_selected_bg_color;
+}
+
+.nothing-media-widget.use-system-accent .nothing-media-player {
+    color: @theme_selected_bg_color;
+}
+
+.nothing-media-widget.use-system-accent .nothing-media-button.primary {
+    background-color: @theme_selected_bg_color;
+}
+
+.nothing-system-widget.use-system-accent .nothing-system-title {
+    color: @theme_selected_bg_color;
+}
+
+.nothing-system-widget.use-system-accent .nothing-system-progress-fill {
+    background-color: @theme_selected_bg_color;
+}

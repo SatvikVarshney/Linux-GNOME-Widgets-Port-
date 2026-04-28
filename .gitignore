@@ -1,0 +1,11 @@
+.codex/
+.vscode/
+*.code-workspace
+*.zip
+
+# GNOME build artifacts
+gnome-port/schemas/gschemas.compiled
+
+# Local reference material, not part of the published port
+upstream-nothing-kde-widgets/
+FOR_USER_PROJECT_AIMS_AND_STEPS.md

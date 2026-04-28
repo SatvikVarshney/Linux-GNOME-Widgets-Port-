@@ -1,0 +1,11 @@
+{
+  "name": "GNOME Widgets Port",
+  "description": "Desktop widgets for GNOME Shell",
+  "uuid": "nothingwidgets@satvik",
+  "version": 1,
+  "shell-version": [
+    "46"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.nothingwidgets",
+  "url": "https://github.com/SatvikVarshney/Linux-GNOME-Widgets-Port-"
+}
