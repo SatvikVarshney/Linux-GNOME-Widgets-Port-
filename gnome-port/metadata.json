@@ -1,7 +1,7 @@
 {
   "name": "GNOME Widgets Port",
   "description": "Desktop widgets for GNOME Shell",
-  "uuid": "gnomewidgets@satvik",
+  "uuid": "linuxgnomewidgets@project",
   "version": 1,
   "shell-version": [
     "46"

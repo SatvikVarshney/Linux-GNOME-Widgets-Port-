@@ -2,6 +2,8 @@
 
 `Linux GNOME Widgets Port` is a GNOME Shell extension project that rebuilds a desktop widget experience as native GNOME widgets instead of KDE Plasma applets.
 
+Repository: <https://github.com/SatvikVarshney/Linux-GNOME-Widgets-Port->
+
 The current port includes:
 
 - date widget
@@ -19,6 +21,11 @@ The current port includes:
 - `gnome-port/widgets/` contains the widget implementations
 - `gnome-port/schemas/` contains the GSettings schema
 - `gnome-port/assets/` contains bundled fonts and sample assets
+
+## Extension Identity
+
+- UUID: `linuxgnomewidgets@project`
+- GSettings schema: `org.gnome.shell.extensions.gnomewidgets`
 
 ## Scope
 
