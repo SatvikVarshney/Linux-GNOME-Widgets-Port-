@@ -579,6 +579,27 @@ function createPanelLabel(label) {
     return widget;
 }
 
+function createDropDownRow(title, model, selected) {
+    const box = new Gtk.Box({
+        orientation: Gtk.Orientation.VERTICAL,
+        spacing: 6,
+    });
+    const label = new Gtk.Label({
+        label: title,
+        xalign: 0,
+    });
+    label.add_css_class('dim-label');
+    const dropdown = new Gtk.DropDown({
+        model,
+        selected,
+        hexpand: true,
+    });
+    box.append(label);
+    box.append(dropdown);
+    box.dropdown = dropdown;
+    return box;
+}
+
 function setAllTheme(settings, value) {
     settings.set_int('theme-mode', value);
     for (const widget of WIDGETS)
@@ -812,12 +833,8 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         }
 
         panel.append(createPanelLabel('Appearance'));
-        const themeRow = new Adw.ComboRow({
-            title: 'Theme',
-            model: Gtk.StringList.new(THEME_LABELS),
-            selected: settings.get_int(widget.themeKey),
-        });
-        themeRow.connect('notify::selected', row => settings.set_int(widget.themeKey, row.selected));
+        const themeRow = createDropDownRow('Theme', Gtk.StringList.new(THEME_LABELS), settings.get_int(widget.themeKey));
+        themeRow.dropdown.connect('notify::selected', dropdown => settings.set_int(widget.themeKey, dropdown.selected));
         panel.append(themeRow);
         panel.append(this._createAccentPalette(widget, settings, preview));
 
@@ -983,13 +1000,13 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         const timeZones = loadSystemTimeZones();
         const selectedTimeZone = settings.get_string('world-clock-time-zone');
         const selectedTimeZoneIndex = Math.max(0, timeZones.findIndex(zone => zone.timeZone === selectedTimeZone));
-        const worldClockTimezoneRow = new Adw.ComboRow({
-            title: 'World clock time zone',
-            model: Gtk.StringList.new(timeZones.map(zone => zone.label)),
-            selected: selectedTimeZoneIndex,
-        });
-        worldClockTimezoneRow.connect('notify::selected', row => {
-            const selectedZone = timeZones[row.selected];
+        const worldClockTimezoneRow = createDropDownRow(
+            'World clock time zone',
+            Gtk.StringList.new(timeZones.map(zone => zone.label)),
+            selectedTimeZoneIndex
+        );
+        worldClockTimezoneRow.dropdown.connect('notify::selected', dropdown => {
+            const selectedZone = timeZones[dropdown.selected];
             if (!selectedZone)
                 return;
             settings.set_string('world-clock-time-zone', selectedZone.timeZone);
@@ -1070,11 +1087,7 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
 
         const weatherResults = [];
         const weatherResultsModel = Gtk.StringList.new(['Type a location to search']);
-        const weatherResultsRow = new Adw.ComboRow({
-            title: 'Open-Meteo matches',
-            model: weatherResultsModel,
-            selected: 0,
-        });
+        const weatherResultsRow = createDropDownRow('Open-Meteo matches', weatherResultsModel, 0);
         panel.append(weatherResultsRow);
 
         let weatherSearchTimeoutId = 0;
@@ -1085,7 +1098,7 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
 
             if (items.length === 0) {
                 weatherResultsModel.append(status ?? 'No matches found');
-                weatherResultsRow.selected = 0;
+                weatherResultsRow.dropdown.selected = 0;
                 return;
             }
 
@@ -1094,7 +1107,7 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
                 weatherResults.push(item);
                 weatherResultsModel.append(formatWeatherLocation(item));
             }
-            weatherResultsRow.selected = 0;
+            weatherResultsRow.dropdown.selected = 0;
         };
 
         weatherSearchRow.connect('changed', row => {
@@ -1124,8 +1137,8 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
             });
         });
 
-        weatherResultsRow.connect('notify::selected', row => {
-            const selected = weatherResults[row.selected - 1];
+        weatherResultsRow.dropdown.connect('notify::selected', dropdown => {
+            const selected = weatherResults[dropdown.selected - 1];
             if (!selected)
                 return;
 
@@ -1138,12 +1151,12 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
             weatherSelectedRow.subtitle = label;
         });
 
-        const weatherUnitRow = new Adw.ComboRow({
-            title: 'Temperature unit',
-            model: Gtk.StringList.new(['Celsius', 'Fahrenheit']),
-            selected: settings.get_int('weather-temperature-unit'),
-        });
-        weatherUnitRow.connect('notify::selected', row => settings.set_int('weather-temperature-unit', row.selected));
+        const weatherUnitRow = createDropDownRow(
+            'Temperature unit',
+            Gtk.StringList.new(['Celsius', 'Fahrenheit']),
+            settings.get_int('weather-temperature-unit')
+        );
+        weatherUnitRow.dropdown.connect('notify::selected', dropdown => settings.set_int('weather-temperature-unit', dropdown.selected));
         panel.append(weatherUnitRow);
     }
 
