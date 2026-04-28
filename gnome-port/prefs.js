@@ -43,7 +43,7 @@ function loadSystemTimeZones() {
 
         return zones.length > 0 ? zones : fallbackZones;
     } catch (error) {
-        log(`Nothing widgets: failed to load system time zones: ${error}`);
+        log(`GNOME Widgets: failed to load system time zones: ${error}`);
         return fallbackZones;
     }
 }
@@ -75,7 +75,7 @@ function fetchWeatherLocations(session, query, callback) {
             const text = new TextDecoder('utf-8').decode(bytes.get_data());
             callback(JSON.parse(text).results ?? [], null);
         } catch (error) {
-            log(`Nothing widgets: failed weather location search: ${error}`);
+            log(`GNOME Widgets: failed weather location search: ${error}`);
             callback(null, 'Location search failed');
         }
     });
@@ -96,7 +96,7 @@ function getPhotoDialogFile(path, extensionPath) {
         try {
             return Gio.File.new_for_uri(path);
         } catch (error) {
-            log(`Nothing widgets: failed to parse photo URI in preferences: ${error}`);
+            log(`GNOME Widgets: failed to parse photo URI in preferences: ${error}`);
             return null;
         }
     }
@@ -107,19 +107,19 @@ function getPhotoDialogFile(path, extensionPath) {
     return Gio.File.new_for_path(GLib.build_filenamev([extensionPath, path]));
 }
 
-export default class NothingWidgetsPreferences extends ExtensionPreferences {
+export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
         const weatherSession = new Soup.Session();
 
         const page = new Adw.PreferencesPage({
-            title: 'Nothing Widgets',
+            title: 'GNOME Widgets',
             icon_name: 'preferences-system-symbolic',
         });
 
         const appearanceGroup = new Adw.PreferencesGroup({
             title: 'Appearance',
-            description: 'Keep the Nothing look while adapting to GNOME.',
+            description: 'Keep the minimalist look while adapting to GNOME.',
         });
 
         const themeRow = new Adw.ComboRow({
@@ -261,7 +261,7 @@ export default class NothingWidgetsPreferences extends ExtensionPreferences {
                     settings.set_string('photo-image-path', selectedPath);
                 } catch (error) {
                     if (!error.matches?.(Gtk.DialogError, Gtk.DialogError.DISMISSED))
-                        log(`Nothing widgets: failed to choose photo image: ${error}`);
+                        log(`GNOME Widgets: failed to choose photo image: ${error}`);
                 }
             });
         });

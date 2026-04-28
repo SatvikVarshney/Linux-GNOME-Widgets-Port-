@@ -326,7 +326,7 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
                 dayPeriod: parts.dayPeriod ?? '',
             };
         } catch (error) {
-            log(`Nothing widgets: failed to format world clock timezone: ${error}`);
+            log(`GNOME Widgets: failed to format world clock timezone: ${error}`);
             const fallback = GLib.DateTime.new_now_local();
             return {
                 hour: fallback.get_hour().toString().padStart(2, '0'),
@@ -372,7 +372,7 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
             );
             return Math.round((asUtc - date.getTime()) / 60000);
         } catch (error) {
-            log(`Nothing widgets: failed to calculate timezone offset: ${error}`);
+            log(`GNOME Widgets: failed to calculate timezone offset: ${error}`);
             return -date.getTimezoneOffset();
         }
     }

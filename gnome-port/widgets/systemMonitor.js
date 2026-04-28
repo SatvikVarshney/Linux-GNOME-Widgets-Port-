@@ -496,7 +496,7 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
             this._networkChart.setValue(formatRateCompact(Math.max(network.rxPerSecond, network.txPerSecond)), network.ratio);
             this._diskChart.setValue(formatPercent(disk.ratio), disk.ratio);
         } catch (error) {
-            log(`Nothing widgets: failed to update system monitor: ${error}`);
+            log(`GNOME Widgets: failed to update system monitor: ${error}`);
             this._setPlaceholderMetrics();
         }
     }

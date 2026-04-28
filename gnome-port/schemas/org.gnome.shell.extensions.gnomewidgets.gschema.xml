@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.nothingwidgets" path="/org/gnome/shell/extensions/nothingwidgets/">
+  <schema id="org.gnome.shell.extensions.gnomewidgets" path="/org/gnome/shell/extensions/gnomewidgets/">
     <key name="widget-x" type="i">
       <default>120</default>
       <summary>Date widget X position</summary>
@@ -287,7 +287,7 @@
     <key name="use-system-accent" type="b">
       <default>false</default>
       <summary>Use system accent</summary>
-      <description>Uses the GNOME accent color instead of Nothing red for highlights.</description>
+      <description>Uses the GNOME accent color instead of the default red highlights.</description>
     </key>
   </schema>
 </schemalist>

@@ -9,7 +9,7 @@ import {WeatherDesktopWidget} from './widgets/weather.js';
 import {MediaDesktopWidget} from './widgets/media.js';
 import {SystemMonitorDesktopWidget} from './widgets/systemMonitor.js';
 
-export default class NothingWidgetsExtension extends Extension {
+export default class GNOMEWidgetsExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._dateWidget = new DateDesktopWidget(this._settings);

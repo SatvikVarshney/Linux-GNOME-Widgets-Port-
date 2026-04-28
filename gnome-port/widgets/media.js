@@ -72,7 +72,7 @@ function artUrlToPath(artUrl) {
         try {
             return Gio.File.new_for_uri(artUrl).get_path();
         } catch (error) {
-            log(`Nothing widgets: failed to parse media art URI: ${error}`);
+            log(`GNOME Widgets: failed to parse media art URI: ${error}`);
             return null;
         }
     }
@@ -112,7 +112,7 @@ class MediaArtArea extends St.DrawingArea {
                 const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, MAX_ART_SIZE, MAX_ART_SIZE, true);
                 this._pixbuf = pixbuf.apply_embedded_orientation() ?? pixbuf;
             } catch (error) {
-                log(`Nothing widgets: failed to load media album art: ${error}`);
+                log(`GNOME Widgets: failed to load media album art: ${error}`);
             }
         }
 
@@ -366,7 +366,7 @@ export class MediaDesktopWidget extends DesktopWidget {
                 }
             );
         } catch (error) {
-            log(`Nothing widgets: failed to connect MPRIS bus: ${error}`);
+            log(`GNOME Widgets: failed to connect MPRIS bus: ${error}`);
             this._setState(this._emptyState('MPRIS unavailable'));
         }
     }
@@ -402,7 +402,7 @@ export class MediaDesktopWidget extends DesktopWidget {
             else
                 this._syncStateFromProxy();
         } catch (error) {
-            log(`Nothing widgets: failed to refresh MPRIS players: ${error}`);
+            log(`GNOME Widgets: failed to refresh MPRIS players: ${error}`);
             this._setState(this._emptyState('Media unavailable'));
         }
     }
@@ -470,7 +470,7 @@ export class MediaDesktopWidget extends DesktopWidget {
             this._playerSignalId = this._playerProxy.connect('g-properties-changed', () => this._syncStateFromProxy());
             this._syncStateFromProxy();
         } catch (error) {
-            log(`Nothing widgets: failed to connect MPRIS player ${name}: ${error}`);
+            log(`GNOME Widgets: failed to connect MPRIS player ${name}: ${error}`);
             this._disconnectCurrentPlayer();
             this._setState(this._emptyState('Media unavailable'));
         }
@@ -481,7 +481,7 @@ export class MediaDesktopWidget extends DesktopWidget {
             try {
                 this._playerProxy.disconnect(this._playerSignalId);
             } catch (error) {
-                log(`Nothing widgets: failed to disconnect MPRIS player signal: ${error}`);
+                log(`GNOME Widgets: failed to disconnect MPRIS player signal: ${error}`);
             }
         }
 
@@ -605,11 +605,11 @@ export class MediaDesktopWidget extends DesktopWidget {
                     this._playerProxy?.call_finish(result);
                     this._syncStateFromProxy();
                 } catch (error) {
-                    log(`Nothing widgets: failed MPRIS ${methodName}: ${error}`);
+                    log(`GNOME Widgets: failed MPRIS ${methodName}: ${error}`);
                 }
             });
         } catch (error) {
-            log(`Nothing widgets: failed to call MPRIS ${methodName}: ${error}`);
+            log(`GNOME Widgets: failed to call MPRIS ${methodName}: ${error}`);
         }
     }
 

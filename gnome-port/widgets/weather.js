@@ -297,7 +297,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
                 const text = new TextDecoder('utf-8').decode(bytes.get_data());
                 callback(JSON.parse(text));
             } catch (error) {
-                log(`Nothing widgets: failed weather request: ${error}`);
+                log(`GNOME Widgets: failed weather request: ${error}`);
                 this._setErrorState('Weather error');
             }
         });

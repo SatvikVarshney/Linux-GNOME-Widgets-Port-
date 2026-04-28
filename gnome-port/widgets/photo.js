@@ -67,7 +67,7 @@ class PhotoImageArea extends St.DrawingArea {
             const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, MAX_LOADED_IMAGE_SIZE, MAX_LOADED_IMAGE_SIZE, true);
             this._pixbuf = pixbuf.apply_embedded_orientation() ?? pixbuf;
         } catch (error) {
-            log(`Nothing widgets: failed to load photo image: ${error}`);
+            log(`GNOME Widgets: failed to load photo image: ${error}`);
         }
 
         this.queue_repaint();
@@ -279,7 +279,7 @@ export class PhotoDesktopWidget extends DesktopWidget {
             try {
                 return Gio.File.new_for_uri(configuredPath).get_path();
             } catch (error) {
-                log(`Nothing widgets: failed to parse photo URI: ${error}`);
+                log(`GNOME Widgets: failed to parse photo URI: ${error}`);
                 return null;
             }
         }

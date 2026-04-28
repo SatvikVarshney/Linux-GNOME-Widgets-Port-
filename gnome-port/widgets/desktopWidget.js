@@ -20,7 +20,7 @@ const WINDOW_TYPES_THAT_COVER_WIDGETS = [
 
 const LAYER_UPDATE_DELAYS_MS = [16, 120, 360, 900];
 const DEBUG_DESKTOP_WIDGETS = false;
-const DEBUG_FILE_PATH = '/tmp/nothingwidgets-debug.log';
+const DEBUG_FILE_PATH = '/tmp/gnomewidgets-debug.log';
 
 let debugFileInitialized = false;
 
@@ -33,7 +33,7 @@ function disconnectSignals(object, signalIds) {
         try {
             object.disconnect(signalId);
         } catch (error) {
-            log(`Nothing widgets: failed to disconnect signal: ${error}`);
+            log(`GNOME Widgets: failed to disconnect signal: ${error}`);
         }
     }
 }
@@ -47,7 +47,7 @@ function resetDebugFileOnce() {
     try {
         GLib.file_set_contents(DEBUG_FILE_PATH, '');
     } catch (error) {
-        log(`Nothing widgets: failed to reset debug file: ${error}`);
+        log(`GNOME Widgets: failed to reset debug file: ${error}`);
     }
 }
 
@@ -59,7 +59,7 @@ function appendDebugLine(line) {
         dataStream.put_string(`${line}\n`, null);
         dataStream.close(null);
     } catch (error) {
-        log(`Nothing widgets: failed to append debug line: ${error}`);
+        log(`GNOME Widgets: failed to append debug line: ${error}`);
     }
 }
 
@@ -100,7 +100,7 @@ export class DesktopWidget {
         try {
             this._interfaceSettings = new Gio.Settings({schema_id: 'org.gnome.desktop.interface'});
         } catch (error) {
-            log(`Nothing widgets: failed to read org.gnome.desktop.interface settings: ${error}`);
+            log(`GNOME Widgets: failed to read org.gnome.desktop.interface settings: ${error}`);
         }
     }
 
@@ -296,7 +296,7 @@ export class DesktopWidget {
                 this._queueLayerUpdate(`window-manager-${signalName}`);
             }));
         } catch (error) {
-            log(`Nothing widgets: failed to watch window-manager ${signalName}: ${error}`);
+            log(`GNOME Widgets: failed to watch window-manager ${signalName}: ${error}`);
         }
     }
 
@@ -320,7 +320,7 @@ export class DesktopWidget {
                     this._queueLayerUpdate(`window-${signalName}`);
                 }));
             } catch (error) {
-                log(`Nothing widgets: failed to watch window ${signalName}: ${error}`);
+                log(`GNOME Widgets: failed to watch window ${signalName}: ${error}`);
             }
         }
 
@@ -331,7 +331,7 @@ export class DesktopWidget {
                 this._queueLayerUpdate('window-unmanaged');
             }));
         } catch (error) {
-            log(`Nothing widgets: failed to watch unmanaged window signal: ${error}`);
+            log(`GNOME Widgets: failed to watch unmanaged window signal: ${error}`);
         }
 
         this._windowSignalIds.set(window, signalIds);
@@ -353,7 +353,7 @@ export class DesktopWidget {
             try {
                 window.disconnect(signalId);
             } catch (error) {
-                log(`Nothing widgets: failed to disconnect window signal: ${error}`);
+                log(`GNOME Widgets: failed to disconnect window signal: ${error}`);
             }
         }
     }
@@ -622,7 +622,7 @@ export class DesktopWidget {
         try {
             return (event.get_state() & Clutter.ModifierType.BUTTON1_MASK) !== 0;
         } catch (error) {
-            log(`Nothing widgets: failed to read pointer button state: ${error}`);
+            log(`GNOME Widgets: failed to read pointer button state: ${error}`);
             return true;
         }
     }
@@ -799,7 +799,7 @@ export class DesktopWidget {
             return;
 
         const timestamp = GLib.DateTime.new_now_local().format('%Y-%m-%d %H:%M:%S.%f');
-        const debugMessage = `Nothing widgets debug [${this._config.debugName ?? this._config.xKey}]: ${message}`;
+        const debugMessage = `GNOME Widgets debug [${this._config.debugName ?? this._config.xKey}]: ${message}`;
 
         console.log(debugMessage);
         appendDebugLine(`${timestamp} ${debugMessage}`);
