@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema id="org.gnome.shell.extensions.gnomewidgets" path="/org/gnome/shell/extensions/gnomewidgets/">
+    <key name="date-enabled" type="b">
+      <default>true</default>
+      <summary>Date widget enabled</summary>
+      <description>Shows the date widget on the desktop.</description>
+    </key>
+    <key name="date-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Date widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="date-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Date widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="date-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Date widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="date-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Date widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when date-accent-color is -1.</description>
+    </key>
     <key name="widget-x" type="i">
       <default>120</default>
       <summary>Date widget X position</summary>
@@ -27,6 +54,33 @@
       <default>380</default>
       <summary>Digital clock X position</summary>
       <description>Horizontal pixel position for the digital clock widget.</description>
+    </key>
+    <key name="clock-enabled" type="b">
+      <default>true</default>
+      <summary>Digital clock widget enabled</summary>
+      <description>Shows the digital clock widget on the desktop.</description>
+    </key>
+    <key name="clock-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Digital clock widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="clock-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Digital clock widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="clock-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Digital clock widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="clock-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Digital clock widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when clock-accent-color is -1.</description>
     </key>
     <key name="clock-y" type="i">
       <default>120</default>
@@ -71,6 +125,33 @@
       <summary>Large digital clock X position</summary>
       <description>Horizontal pixel position for the large digital clock widget.</description>
     </key>
+    <key name="large-clock-enabled" type="b">
+      <default>true</default>
+      <summary>Large digital clock widget enabled</summary>
+      <description>Shows the large digital clock widget on the desktop.</description>
+    </key>
+    <key name="large-clock-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Large digital clock widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="large-clock-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Large digital clock widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="large-clock-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Large digital clock widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="large-clock-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Large digital clock widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when large-clock-accent-color is -1.</description>
+    </key>
     <key name="large-clock-y" type="i">
       <default>370</default>
       <summary>Large digital clock Y position</summary>
@@ -97,6 +178,33 @@
       <default>640</default>
       <summary>Analog clock X position</summary>
       <description>Horizontal pixel position for the analog clock widget.</description>
+    </key>
+    <key name="analog-clock-enabled" type="b">
+      <default>true</default>
+      <summary>Analog clock widget enabled</summary>
+      <description>Shows the analog clock widget on the desktop.</description>
+    </key>
+    <key name="analog-clock-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Analog clock widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="analog-clock-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Analog clock widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="analog-clock-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Analog clock widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="analog-clock-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Analog clock widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when analog-clock-accent-color is -1.</description>
     </key>
     <key name="analog-clock-y" type="i">
       <default>360</default>
@@ -125,6 +233,33 @@
       <default>920</default>
       <summary>Photo widget X position</summary>
       <description>Horizontal pixel position for the photo widget.</description>
+    </key>
+    <key name="photo-enabled" type="b">
+      <default>true</default>
+      <summary>Photo widget enabled</summary>
+      <description>Shows the photo widget on the desktop.</description>
+    </key>
+    <key name="photo-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Photo widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="photo-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Photo widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="photo-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Photo widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="photo-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Photo widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when photo-accent-color is -1.</description>
     </key>
     <key name="photo-y" type="i">
       <default>360</default>
@@ -180,6 +315,33 @@
       <summary>Weather widget X position</summary>
       <description>Horizontal pixel position for the weather widget.</description>
     </key>
+    <key name="weather-enabled" type="b">
+      <default>true</default>
+      <summary>Weather widget enabled</summary>
+      <description>Shows the weather widget on the desktop.</description>
+    </key>
+    <key name="weather-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Weather widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="weather-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Weather widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="weather-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Weather widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="weather-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Weather widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when weather-accent-color is -1.</description>
+    </key>
     <key name="weather-y" type="i">
       <default>360</default>
       <summary>Weather widget Y position</summary>
@@ -233,6 +395,33 @@
       <summary>Media widget X position</summary>
       <description>Horizontal pixel position for the media widget.</description>
     </key>
+    <key name="media-enabled" type="b">
+      <default>true</default>
+      <summary>Media widget enabled</summary>
+      <description>Shows the media widget on the desktop.</description>
+    </key>
+    <key name="media-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Media widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="media-use-system-accent" type="b">
+      <default>false</default>
+      <summary>Media widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="media-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Media widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="media-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Media widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when media-accent-color is -1.</description>
+    </key>
     <key name="media-y" type="i">
       <default>620</default>
       <summary>Media widget Y position</summary>
@@ -254,6 +443,33 @@
       <default>820</default>
       <summary>System monitor widget X position</summary>
       <description>Horizontal pixel position for the system monitor widget.</description>
+    </key>
+    <key name="system-enabled" type="b">
+      <default>true</default>
+      <summary>System monitor widget enabled</summary>
+      <description>Shows the system monitor widget on the desktop.</description>
+    </key>
+    <key name="system-theme-mode" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>System monitor widget theme mode</summary>
+      <description>0 = Dark, 1 = Light, 2 = Follow system color-scheme.</description>
+    </key>
+    <key name="system-use-system-accent" type="b">
+      <default>false</default>
+      <summary>System monitor widget uses system accent</summary>
+      <description>Uses the GNOME accent color instead of the default red highlight.</description>
+    </key>
+    <key name="system-accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>System monitor widget accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="system-custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>System monitor widget custom accent color</summary>
+      <description>Custom #rrggbb accent color used when system-accent-color is -1.</description>
     </key>
     <key name="system-y" type="i">
       <default>620</default>
@@ -288,6 +504,17 @@
       <default>false</default>
       <summary>Use system accent</summary>
       <description>Uses the GNOME accent color instead of the default red highlights.</description>
+    </key>
+    <key name="accent-color" type="i">
+      <range min="-1" max="17"/>
+      <default>0</default>
+      <summary>Global accent color</summary>
+      <description>-1 = custom, 0..17 = built-in palette colors.</description>
+    </key>
+    <key name="custom-accent-color" type="s">
+      <default>'#ff4444'</default>
+      <summary>Global custom accent color</summary>
+      <description>Custom #rrggbb accent color used when accent-color is -1.</description>
     </key>
   </schema>
 </schemalist>

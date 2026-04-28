@@ -18,6 +18,11 @@ const MEDIA_WIDGET_CONFIG = {
     minHeight: 170,
     maxWidth: 760,
     maxHeight: 420,
+    enabledKey: 'media-enabled',
+    themeKey: 'media-theme-mode',
+    accentKey: 'media-use-system-accent',
+    accentColorKey: 'media-accent-color',
+    customColorKey: 'media-custom-accent-color',
     xKey: 'media-x',
     yKey: 'media-y',
     widthKey: 'media-width',
@@ -144,7 +149,17 @@ class MediaArtArea extends St.DrawingArea {
 
         const imageWidth = this._pixbuf.get_width();
         const imageHeight = this._pixbuf.get_height();
+        if (imageWidth <= 0 || imageHeight <= 0) {
+            context.$dispose();
+            return;
+        }
+
         const scale = Math.max(width / imageWidth, height / imageHeight);
+        if (!Number.isFinite(scale) || scale <= 0) {
+            context.$dispose();
+            return;
+        }
+
         const drawWidth = imageWidth * scale;
         const drawHeight = imageHeight * scale;
 
@@ -684,14 +699,15 @@ export class MediaDesktopWidget extends DesktopWidget {
         const artSize = horizontal
             ? Math.max(92, Math.min(contentHeight - 28, contentWidth * 0.38))
             : Math.max(90, Math.min(contentWidth - 36, contentHeight * 0.42));
+        const safeArtSize = Number.isFinite(artSize) ? Math.max(1, artSize) : 90;
         const buttonSize = Math.round(34 * scale);
         const primaryButtonSize = Math.round(44 * scale);
         const radius = Math.round(18 * scale);
 
         this._card.vertical = !horizontal;
         this._card.set_style(`padding: ${Math.round(16 * scale)}px; spacing: ${Math.round(14 * scale)}px; border-radius: ${radius}px;`);
-        this._artFrame.set_size(Math.round(artSize), Math.round(artSize));
-        this._artArea.set_size(Math.round(artSize), Math.round(artSize));
+        this._artFrame.set_size(Math.round(safeArtSize), Math.round(safeArtSize));
+        this._artArea.set_size(Math.round(safeArtSize), Math.round(safeArtSize));
         this._artArea.setRadius(Math.round(14 * scale));
         this._artFallback.set_icon_size(Math.round(44 * scale));
 

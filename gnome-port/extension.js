@@ -9,68 +9,101 @@ import {WeatherDesktopWidget} from './widgets/weather.js';
 import {MediaDesktopWidget} from './widgets/media.js';
 import {SystemMonitorDesktopWidget} from './widgets/systemMonitor.js';
 
+function getBooleanSetting(settings, key, fallback) {
+    try {
+        return settings.get_boolean(key);
+    } catch (error) {
+        log(`GNOME Widgets: missing or invalid boolean setting ${key}: ${error}`);
+        return fallback;
+    }
+}
+
 export default class GNOMEWidgetsExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-        this._dateWidget = new DateDesktopWidget(this._settings);
-        this._dateWidget.enable();
-        this._digitalClockWidget = new DigitalClockDesktopWidget(this._settings);
-        this._digitalClockWidget.enable();
-        this._largeDigitalClockWidget = new LargeDigitalClockDesktopWidget(this._settings);
-        this._largeDigitalClockWidget.enable();
-        this._analogClockWidget = new AnalogClockDesktopWidget(this._settings);
-        this._analogClockWidget.enable();
-        this._photoWidget = new PhotoDesktopWidget(this._settings, this.path);
-        this._photoWidget.enable();
-        this._weatherWidget = new WeatherDesktopWidget(this._settings);
-        this._weatherWidget.enable();
-        this._mediaWidget = new MediaDesktopWidget(this._settings);
-        this._mediaWidget.enable();
-        this._systemWidget = new SystemMonitorDesktopWidget(this._settings);
-        this._systemWidget.enable();
+        this._widgetEntries = [
+            {
+                key: 'date-enabled',
+                property: '_dateWidget',
+                create: () => new DateDesktopWidget(this._settings),
+            },
+            {
+                key: 'clock-enabled',
+                property: '_digitalClockWidget',
+                create: () => new DigitalClockDesktopWidget(this._settings),
+            },
+            {
+                key: 'large-clock-enabled',
+                property: '_largeDigitalClockWidget',
+                create: () => new LargeDigitalClockDesktopWidget(this._settings),
+            },
+            {
+                key: 'analog-clock-enabled',
+                property: '_analogClockWidget',
+                create: () => new AnalogClockDesktopWidget(this._settings),
+            },
+            {
+                key: 'photo-enabled',
+                property: '_photoWidget',
+                create: () => new PhotoDesktopWidget(this._settings, this.path),
+            },
+            {
+                key: 'weather-enabled',
+                property: '_weatherWidget',
+                create: () => new WeatherDesktopWidget(this._settings),
+            },
+            {
+                key: 'media-enabled',
+                property: '_mediaWidget',
+                create: () => new MediaDesktopWidget(this._settings),
+            },
+            {
+                key: 'system-enabled',
+                property: '_systemWidget',
+                create: () => new SystemMonitorDesktopWidget(this._settings),
+            },
+        ];
+        this._settingsSignalIds = [];
+
+        for (const entry of this._widgetEntries) {
+            this._settingsSignalIds.push(
+                this._settings.connect(`changed::${entry.key}`, () => this._syncWidget(entry))
+            );
+            this._syncWidget(entry);
+        }
     }
 
     disable() {
-        if (this._systemWidget) {
-            this._systemWidget.disable();
-            this._systemWidget = null;
+        if (this._settings && this._settingsSignalIds) {
+            for (const signalId of this._settingsSignalIds)
+                this._settings.disconnect(signalId);
+            this._settingsSignalIds = [];
         }
 
-        if (this._mediaWidget) {
-            this._mediaWidget.disable();
-            this._mediaWidget = null;
-        }
+        for (const entry of this._widgetEntries ?? [])
+            this._disableWidget(entry);
 
-        if (this._weatherWidget) {
-            this._weatherWidget.disable();
-            this._weatherWidget = null;
-        }
-
-        if (this._photoWidget) {
-            this._photoWidget.disable();
-            this._photoWidget = null;
-        }
-
-        if (this._analogClockWidget) {
-            this._analogClockWidget.disable();
-            this._analogClockWidget = null;
-        }
-
-        if (this._largeDigitalClockWidget) {
-            this._largeDigitalClockWidget.disable();
-            this._largeDigitalClockWidget = null;
-        }
-
-        if (this._digitalClockWidget) {
-            this._digitalClockWidget.disable();
-            this._digitalClockWidget = null;
-        }
-
-        if (this._dateWidget) {
-            this._dateWidget.disable();
-            this._dateWidget = null;
-        }
-
+        this._widgetEntries = [];
         this._settings = null;
+    }
+
+    _syncWidget(entry) {
+        if (getBooleanSetting(this._settings, entry.key, true)) {
+            if (!this[entry.property]) {
+                this[entry.property] = entry.create();
+                this[entry.property].enable();
+            }
+            return;
+        }
+
+        this._disableWidget(entry);
+    }
+
+    _disableWidget(entry) {
+        if (!this[entry.property])
+            return;
+
+        this[entry.property].disable();
+        this[entry.property] = null;
     }
 }

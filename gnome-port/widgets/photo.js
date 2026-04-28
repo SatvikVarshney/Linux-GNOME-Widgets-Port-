@@ -17,6 +17,11 @@ const PHOTO_WIDGET_CONFIG = {
     minHeight: 140,
     maxWidth: 720,
     maxHeight: 720,
+    enabledKey: 'photo-enabled',
+    themeKey: 'photo-theme-mode',
+    accentKey: 'photo-use-system-accent',
+    accentColorKey: 'photo-accent-color',
+    customColorKey: 'photo-custom-accent-color',
     xKey: 'photo-x',
     yKey: 'photo-y',
     widthKey: 'photo-width',
@@ -270,7 +275,7 @@ export class PhotoDesktopWidget extends DesktopWidget {
     }
 
     _resolveImagePath() {
-        const configuredPath = this._settings.get_string('photo-image-path').trim();
+        const configuredPath = this._getStringSetting('photo-image-path', '').trim();
 
         if (!configuredPath)
             return null;
@@ -298,7 +303,7 @@ export class PhotoDesktopWidget extends DesktopWidget {
         if (existingEffect)
             this._imageArea.remove_effect(existingEffect);
 
-        if (!this._settings.get_boolean('photo-grayscale-enabled'))
+        if (!this._getBooleanSetting('photo-grayscale-enabled', false))
             return;
 
         const effect = new Clutter.DesaturateEffect();
@@ -363,15 +368,15 @@ export class PhotoDesktopWidget extends DesktopWidget {
 
         const width = this._actor.width || this._config.defaultWidth;
         const height = this._actor.height || this._config.defaultHeight;
-        const borderEnabled = this._settings.get_boolean('photo-border-enabled');
-        const borderSize = borderEnabled ? this._settings.get_int('photo-border-size') : 0;
+        const borderEnabled = this._getBooleanSetting('photo-border-enabled', false);
+        const borderSize = borderEnabled ? this._getIntSetting('photo-border-size', 10) : 0;
         const outerWidth = Math.max(1, width - 20);
         const outerHeight = Math.max(1, height - 20);
         const innerWidth = Math.max(1, outerWidth - borderSize * 2);
         const innerHeight = Math.max(1, outerHeight - borderSize * 2);
         const outerRadius = this._getRadius(outerWidth, outerHeight);
         const innerRadius = Math.max(0, outerRadius - borderSize);
-        const fillMode = this._settings.get_int('photo-image-fill-mode');
+        const fillMode = this._getIntSetting('photo-image-fill-mode', 0);
         const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.65, 2.2);
 
         this._frame.set_size(outerWidth, outerHeight);
@@ -391,7 +396,7 @@ export class PhotoDesktopWidget extends DesktopWidget {
     }
 
     _getRadius(width, height) {
-        if (!this._settings.get_boolean('photo-pill-shape-enabled'))
+        if (!this._getBooleanSetting('photo-pill-shape-enabled', false))
             return 20;
 
         const aspectRatio = width / height;

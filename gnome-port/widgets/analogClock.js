@@ -12,6 +12,11 @@ const ANALOG_CLOCK_WIDGET_CONFIG = {
     minHeight: 160,
     maxWidth: 520,
     maxHeight: 520,
+    enabledKey: 'analog-clock-enabled',
+    themeKey: 'analog-clock-theme-mode',
+    accentKey: 'analog-clock-use-system-accent',
+    accentColorKey: 'analog-clock-accent-color',
+    customColorKey: 'analog-clock-custom-accent-color',
     xKey: 'analog-clock-x',
     yKey: 'analog-clock-y',
     widthKey: 'analog-clock-width',
@@ -109,8 +114,8 @@ export class AnalogClockDesktopWidget extends DesktopWidget {
         const baseClass = 'nothing-analog-clock-widget';
         const themeClasses = this._actor.get_style_class_name()
             .split(' ')
-            .filter(name => name === 'theme-light' || name === 'use-system-accent');
-        const styleClass = this._settings.get_int('analog-clock-style') === 1 ? 'minimal' : 'swiss';
+            .filter(name => name === 'theme-light' || name === 'use-system-accent' || name.startsWith('accent-'));
+        const styleClass = this._getIntSetting('analog-clock-style', 0) === 1 ? 'minimal' : 'swiss';
         this._actor.set_style_class_name([baseClass, styleClass, ...themeClasses].join(' '));
     }
 
@@ -141,7 +146,7 @@ export class AnalogClockDesktopWidget extends DesktopWidget {
         const diameter = Math.floor(Math.min(this._actor.width, this._actor.height) - 20);
         const size = clamp(diameter, 120, this._config.maxWidth - 20);
         const center = size / 2;
-        const isMinimal = this._settings.get_int('analog-clock-style') === 1;
+        const isMinimal = this._getIntSetting('analog-clock-style', 0) === 1;
 
         this._face.set_size(size, size);
         this._face.set_position(Math.round((this._actor.width - size) / 2), Math.round((this._actor.height - size) / 2));

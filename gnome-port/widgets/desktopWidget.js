@@ -9,6 +9,61 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 const THEME_DARK = 0;
 const THEME_LIGHT = 1;
 const THEME_FOLLOW_SYSTEM = 2;
+const ACCENT_CUSTOM = -1;
+const ACCENT_CLASS_NAMES = [
+    'accent-red',
+    'accent-orange',
+    'accent-amber',
+    'accent-yellow',
+    'accent-lime',
+    'accent-green',
+    'accent-teal',
+    'accent-cyan',
+    'accent-sky',
+    'accent-blue',
+    'accent-indigo',
+    'accent-violet',
+    'accent-purple',
+    'accent-pink',
+    'accent-rose',
+    'accent-slate',
+    'accent-graphite',
+    'accent-white',
+];
+const ACCENT_COLORS = [
+    '#ff4444',
+    '#ff7a29',
+    '#f2ad24',
+    '#ead128',
+    '#85c733',
+    '#1ba861',
+    '#0d9e94',
+    '#0cafd6',
+    '#3393ef',
+    '#3b7af5',
+    '#6163eb',
+    '#8057e6',
+    '#945ce8',
+    '#eb3d85',
+    '#f5466b',
+    '#64748b',
+    '#404040',
+    '#f0f0e6',
+];
+const CUSTOM_TEXT_ACCENT_CLASSES = [
+    'nothing-date-day',
+    'nothing-world-clock-city',
+    'nothing-world-clock-abbrev',
+    'nothing-weather-symbol',
+    'nothing-media-player',
+    'nothing-system-title',
+];
+const CUSTOM_BACKGROUND_ACCENT_CLASSES = [
+    'nothing-analog-clock-hand',
+    'nothing-analog-clock-second-dot',
+    'nothing-media-button',
+    'nothing-system-progress-fill',
+];
 
 const WINDOW_TYPES_THAT_COVER_WIDGETS = [
     Meta.WindowType.NORMAL,
@@ -26,6 +81,47 @@ let debugFileInitialized = false;
 
 export function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
+}
+
+function readSetting(readValue, key, fallback) {
+    try {
+        return readValue();
+    } catch (error) {
+        log(`GNOME Widgets: missing or invalid setting ${key}: ${error}`);
+        return fallback;
+    }
+}
+
+function normalizeHexColor(value, fallback = '#ff4444') {
+    const text = String(value ?? '').trim();
+    const match = text.match(/^#?([0-9a-fA-F]{6})$/);
+
+    if (!match)
+        return fallback;
+
+    return `#${match[1].toLowerCase()}`;
+}
+
+function hexToRgba(hex, alpha = 0.95) {
+    const normalized = normalizeHexColor(hex);
+    return [
+        parseInt(normalized.slice(1, 3), 16) / 255,
+        parseInt(normalized.slice(3, 5), 16) / 255,
+        parseInt(normalized.slice(5, 7), 16) / 255,
+        alpha,
+    ];
+}
+
+function updateInlineStyle(style, property, value) {
+    const declarations = String(style ?? '')
+        .split(';')
+        .map(item => item.trim())
+        .filter(item => item.length > 0 && !item.toLowerCase().startsWith(`${property}:`));
+
+    if (value)
+        declarations.push(`${property}: ${value}`);
+
+    return declarations.length > 0 ? `${declarations.join('; ')};` : null;
 }
 
 function disconnectSignals(object, signalIds) {
@@ -114,15 +210,26 @@ export class DesktopWidget {
         this._restorePosition();
         this._applyThemeClasses();
         this._applySizeStyles();
+        this._applyCustomAccentStyles();
         this._connectDesktopSignals();
         this._queueLayerUpdate('enable');
 
         this._settingsSignalIds.push(
-            this._settings.connect('changed::theme-mode', () => this._applyThemeClasses())
+            this._settings.connect(`changed::${this._config.themeKey ?? 'theme-mode'}`, () => this._applyThemeClasses())
         );
         this._settingsSignalIds.push(
-            this._settings.connect('changed::use-system-accent', () => this._applyThemeClasses())
+            this._settings.connect(`changed::${this._config.accentKey ?? 'use-system-accent'}`, () => this._applyThemeClasses())
         );
+        if (this._config.accentColorKey) {
+            this._settingsSignalIds.push(
+                this._settings.connect(`changed::${this._config.accentColorKey}`, () => this._applyThemeClasses())
+            );
+        }
+        if (this._config.customColorKey) {
+            this._settingsSignalIds.push(
+                this._settings.connect(`changed::${this._config.customColorKey}`, () => this._applyThemeClasses())
+            );
+        }
 
         this._monitorSignalId = Main.layoutManager.connect('monitors-changed', () => {
             this._restoreSize();
@@ -692,14 +799,14 @@ export class DesktopWidget {
     }
 
     _restorePosition() {
-        const x = this._settings.get_int(this._config.xKey);
-        const y = this._settings.get_int(this._config.yKey);
+        const x = this._getIntSetting(this._config.xKey, 120);
+        const y = this._getIntSetting(this._config.yKey, 120);
         this._setPosition(x, y, false);
     }
 
     _restoreSize() {
-        const width = this._settings.get_int(this._config.widthKey);
-        const height = this._settings.get_int(this._config.heightKey);
+        const width = this._getIntSetting(this._config.widthKey, this._config.defaultWidth);
+        const height = this._getIntSetting(this._config.heightKey, this._config.defaultHeight);
         this._setSize(width, height, false);
     }
 
@@ -751,6 +858,7 @@ export class DesktopWidget {
 
         this._actor.set_size(clampedWidth, clampedHeight);
         this._applySizeStyles();
+        this._applyCustomAccentStyles();
         this._syncInputLayer();
         this._setPosition(this._actor.x, this._actor.y, false);
 
@@ -764,7 +872,7 @@ export class DesktopWidget {
     }
 
     _isLightThemeEnabled() {
-        const configuredTheme = this._settings.get_int('theme-mode');
+        const configuredTheme = this._getIntSetting(this._config.themeKey ?? 'theme-mode', THEME_DARK);
 
         if (configuredTheme === THEME_LIGHT)
             return true;
@@ -773,7 +881,11 @@ export class DesktopWidget {
             return false;
 
         if (configuredTheme === THEME_FOLLOW_SYSTEM && this._interfaceSettings)
-            return this._interfaceSettings.get_string('color-scheme') !== 'prefer-dark';
+            return readSetting(
+                () => this._interfaceSettings.get_string('color-scheme'),
+                'org.gnome.desktop.interface color-scheme',
+                'prefer-dark'
+            ) !== 'prefer-dark';
 
         return false;
     }
@@ -783,15 +895,85 @@ export class DesktopWidget {
             return;
 
         const classNames = this._actor.get_style_class_name().split(' ').filter(name => name.length > 0);
-        const filteredClassNames = classNames.filter(name => name !== 'theme-light' && name !== 'use-system-accent');
+        const filteredClassNames = classNames.filter(name =>
+            name !== 'theme-light' &&
+            name !== 'use-system-accent' &&
+            !ACCENT_CLASS_NAMES.includes(name)
+        );
 
         if (this._isLightThemeEnabled())
             filteredClassNames.push('theme-light');
 
-        if (this._settings.get_boolean('use-system-accent'))
+        if (this._getBooleanSetting(this._config.accentKey ?? 'use-system-accent', false)) {
             filteredClassNames.push('use-system-accent');
+        } else {
+            const accentIndex = this._getIntSetting(this._config.accentColorKey ?? 'accent-color', 0);
+            if (accentIndex >= 0)
+                filteredClassNames.push(ACCENT_CLASS_NAMES[accentIndex] ?? ACCENT_CLASS_NAMES[0]);
+        }
 
         this._actor.set_style_class_name(filteredClassNames.join(' '));
+        this._applyCustomAccentStyles();
+    }
+
+    _getAccentHex() {
+        if (this._getBooleanSetting(this._config.accentKey ?? 'use-system-accent', false))
+            return null;
+
+        const accentIndex = this._getIntSetting(this._config.accentColorKey ?? 'accent-color', 0);
+        if (accentIndex === ACCENT_CUSTOM)
+            return normalizeHexColor(this._getStringSetting(this._config.customColorKey ?? 'custom-accent-color', '#ff4444'));
+
+        return ACCENT_COLORS[accentIndex] ?? ACCENT_COLORS[0];
+    }
+
+    _getAccentRgba(alpha = 0.95) {
+        return hexToRgba(this._getAccentHex() ?? '#367bf0', alpha);
+    }
+
+    _applyCustomAccentStyles() {
+        const customHex = this._getIntSetting(this._config.accentColorKey ?? 'accent-color', 0) === ACCENT_CUSTOM &&
+            !this._getBooleanSetting(this._config.accentKey ?? 'use-system-accent', false)
+            ? normalizeHexColor(this._getStringSetting(this._config.customColorKey ?? 'custom-accent-color', '#ff4444'))
+            : null;
+
+        this._applyInlineAccentProperty(this._actor, CUSTOM_TEXT_ACCENT_CLASSES, 'color', customHex);
+        this._applyInlineAccentProperty(this._actor, CUSTOM_BACKGROUND_ACCENT_CLASSES, 'background-color', customHex);
+    }
+
+    _applyInlineAccentProperty(actor, targetClasses, property, value) {
+        if (!actor)
+            return;
+
+        const styleClassName = actor.get_style_class_name?.() ?? '';
+        const classNames = styleClassName.split(' ').filter(Boolean);
+        const isTarget = targetClasses.some(className => classNames.includes(className)) &&
+            (!classNames.includes('nothing-analog-clock-hand') || classNames.includes('second')) &&
+            (!classNames.includes('nothing-media-button') || classNames.includes('primary'));
+
+        if (isTarget) {
+            const currentStyle = actor.get_style?.() ?? actor.style ?? '';
+            actor.set_style(updateInlineStyle(currentStyle, property, value));
+        }
+
+        for (const child of actor.get_children?.() ?? [])
+            this._applyInlineAccentProperty(child, targetClasses, property, value);
+    }
+
+    _getBooleanSetting(key, fallback) {
+        return readSetting(() => this._settings.get_boolean(key), key, fallback);
+    }
+
+    _getIntSetting(key, fallback) {
+        return readSetting(() => this._settings.get_int(key), key, fallback);
+    }
+
+    _getStringSetting(key, fallback) {
+        return readSetting(() => this._settings.get_string(key), key, fallback);
+    }
+
+    _getDoubleSetting(key, fallback) {
+        return readSetting(() => this._settings.get_double(key), key, fallback);
     }
 
     _debug(message) {

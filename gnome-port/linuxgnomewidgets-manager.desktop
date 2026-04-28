@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=GNOME Widgets
+Comment=Arrange and configure desktop widgets
+Exec=gnome-extensions prefs linuxgnomewidgets@project
+Icon=linuxgnomewidgets-manager
+Terminal=false
+Categories=GTK;GNOME;Settings;Utility;
+StartupNotify=true

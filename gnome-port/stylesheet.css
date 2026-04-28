@@ -596,3 +596,201 @@
 .nothing-system-widget.use-system-accent .nothing-system-progress-fill {
     background-color: @theme_selected_bg_color;
 }
+
+.nothing-date-widget.accent-red .nothing-date-day,
+.nothing-digital-clock-widget.accent-red .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-red .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-red .nothing-weather-symbol,
+.nothing-media-widget.accent-red .nothing-media-player,
+.nothing-system-widget.accent-red .nothing-system-title { color: #ff4444; }
+.nothing-analog-clock-widget.accent-red .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-red .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-red .nothing-media-button.primary,
+.nothing-system-widget.accent-red .nothing-system-progress-fill { background-color: #ff4444; }
+
+.nothing-date-widget.accent-orange .nothing-date-day,
+.nothing-digital-clock-widget.accent-orange .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-orange .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-orange .nothing-weather-symbol,
+.nothing-media-widget.accent-orange .nothing-media-player,
+.nothing-system-widget.accent-orange .nothing-system-title { color: #ff7a29; }
+.nothing-analog-clock-widget.accent-orange .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-orange .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-orange .nothing-media-button.primary,
+.nothing-system-widget.accent-orange .nothing-system-progress-fill { background-color: #ff7a29; }
+
+.nothing-date-widget.accent-amber .nothing-date-day,
+.nothing-digital-clock-widget.accent-amber .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-amber .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-amber .nothing-weather-symbol,
+.nothing-media-widget.accent-amber .nothing-media-player,
+.nothing-system-widget.accent-amber .nothing-system-title { color: #f2ad24; }
+.nothing-analog-clock-widget.accent-amber .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-amber .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-amber .nothing-media-button.primary,
+.nothing-system-widget.accent-amber .nothing-system-progress-fill { background-color: #f2ad24; }
+
+.nothing-date-widget.accent-yellow .nothing-date-day,
+.nothing-digital-clock-widget.accent-yellow .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-yellow .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-yellow .nothing-weather-symbol,
+.nothing-media-widget.accent-yellow .nothing-media-player,
+.nothing-system-widget.accent-yellow .nothing-system-title { color: #ead128; }
+.nothing-analog-clock-widget.accent-yellow .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-yellow .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-yellow .nothing-media-button.primary,
+.nothing-system-widget.accent-yellow .nothing-system-progress-fill { background-color: #ead128; }
+
+.nothing-date-widget.accent-lime .nothing-date-day,
+.nothing-digital-clock-widget.accent-lime .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-lime .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-lime .nothing-weather-symbol,
+.nothing-media-widget.accent-lime .nothing-media-player,
+.nothing-system-widget.accent-lime .nothing-system-title { color: #85c733; }
+.nothing-analog-clock-widget.accent-lime .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-lime .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-lime .nothing-media-button.primary,
+.nothing-system-widget.accent-lime .nothing-system-progress-fill { background-color: #85c733; }
+
+.nothing-date-widget.accent-green .nothing-date-day,
+.nothing-digital-clock-widget.accent-green .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-green .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-green .nothing-weather-symbol,
+.nothing-media-widget.accent-green .nothing-media-player,
+.nothing-system-widget.accent-green .nothing-system-title { color: #1ba861; }
+.nothing-analog-clock-widget.accent-green .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-green .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-green .nothing-media-button.primary,
+.nothing-system-widget.accent-green .nothing-system-progress-fill { background-color: #1ba861; }
+
+.nothing-date-widget.accent-teal .nothing-date-day,
+.nothing-digital-clock-widget.accent-teal .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-teal .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-teal .nothing-weather-symbol,
+.nothing-media-widget.accent-teal .nothing-media-player,
+.nothing-system-widget.accent-teal .nothing-system-title { color: #0d9e94; }
+.nothing-analog-clock-widget.accent-teal .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-teal .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-teal .nothing-media-button.primary,
+.nothing-system-widget.accent-teal .nothing-system-progress-fill { background-color: #0d9e94; }
+
+.nothing-date-widget.accent-cyan .nothing-date-day,
+.nothing-digital-clock-widget.accent-cyan .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-cyan .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-cyan .nothing-weather-symbol,
+.nothing-media-widget.accent-cyan .nothing-media-player,
+.nothing-system-widget.accent-cyan .nothing-system-title { color: #0cafd6; }
+.nothing-analog-clock-widget.accent-cyan .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-cyan .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-cyan .nothing-media-button.primary,
+.nothing-system-widget.accent-cyan .nothing-system-progress-fill { background-color: #0cafd6; }
+
+.nothing-date-widget.accent-sky .nothing-date-day,
+.nothing-digital-clock-widget.accent-sky .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-sky .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-sky .nothing-weather-symbol,
+.nothing-media-widget.accent-sky .nothing-media-player,
+.nothing-system-widget.accent-sky .nothing-system-title { color: #3393ef; }
+.nothing-analog-clock-widget.accent-sky .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-sky .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-sky .nothing-media-button.primary,
+.nothing-system-widget.accent-sky .nothing-system-progress-fill { background-color: #3393ef; }
+
+.nothing-date-widget.accent-blue .nothing-date-day,
+.nothing-digital-clock-widget.accent-blue .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-blue .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-blue .nothing-weather-symbol,
+.nothing-media-widget.accent-blue .nothing-media-player,
+.nothing-system-widget.accent-blue .nothing-system-title { color: #3b7af5; }
+.nothing-analog-clock-widget.accent-blue .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-blue .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-blue .nothing-media-button.primary,
+.nothing-system-widget.accent-blue .nothing-system-progress-fill { background-color: #3b7af5; }
+
+.nothing-date-widget.accent-indigo .nothing-date-day,
+.nothing-digital-clock-widget.accent-indigo .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-indigo .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-indigo .nothing-weather-symbol,
+.nothing-media-widget.accent-indigo .nothing-media-player,
+.nothing-system-widget.accent-indigo .nothing-system-title { color: #6163eb; }
+.nothing-analog-clock-widget.accent-indigo .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-indigo .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-indigo .nothing-media-button.primary,
+.nothing-system-widget.accent-indigo .nothing-system-progress-fill { background-color: #6163eb; }
+
+.nothing-date-widget.accent-violet .nothing-date-day,
+.nothing-digital-clock-widget.accent-violet .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-violet .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-violet .nothing-weather-symbol,
+.nothing-media-widget.accent-violet .nothing-media-player,
+.nothing-system-widget.accent-violet .nothing-system-title { color: #8057e6; }
+.nothing-analog-clock-widget.accent-violet .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-violet .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-violet .nothing-media-button.primary,
+.nothing-system-widget.accent-violet .nothing-system-progress-fill { background-color: #8057e6; }
+
+.nothing-date-widget.accent-purple .nothing-date-day,
+.nothing-digital-clock-widget.accent-purple .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-purple .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-purple .nothing-weather-symbol,
+.nothing-media-widget.accent-purple .nothing-media-player,
+.nothing-system-widget.accent-purple .nothing-system-title { color: #945ce8; }
+.nothing-analog-clock-widget.accent-purple .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-purple .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-purple .nothing-media-button.primary,
+.nothing-system-widget.accent-purple .nothing-system-progress-fill { background-color: #945ce8; }
+
+.nothing-date-widget.accent-pink .nothing-date-day,
+.nothing-digital-clock-widget.accent-pink .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-pink .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-pink .nothing-weather-symbol,
+.nothing-media-widget.accent-pink .nothing-media-player,
+.nothing-system-widget.accent-pink .nothing-system-title { color: #eb3d85; }
+.nothing-analog-clock-widget.accent-pink .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-pink .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-pink .nothing-media-button.primary,
+.nothing-system-widget.accent-pink .nothing-system-progress-fill { background-color: #eb3d85; }
+
+.nothing-date-widget.accent-rose .nothing-date-day,
+.nothing-digital-clock-widget.accent-rose .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-rose .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-rose .nothing-weather-symbol,
+.nothing-media-widget.accent-rose .nothing-media-player,
+.nothing-system-widget.accent-rose .nothing-system-title { color: #f5466b; }
+.nothing-analog-clock-widget.accent-rose .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-rose .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-rose .nothing-media-button.primary,
+.nothing-system-widget.accent-rose .nothing-system-progress-fill { background-color: #f5466b; }
+
+.nothing-date-widget.accent-slate .nothing-date-day,
+.nothing-digital-clock-widget.accent-slate .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-slate .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-slate .nothing-weather-symbol,
+.nothing-media-widget.accent-slate .nothing-media-player,
+.nothing-system-widget.accent-slate .nothing-system-title { color: #64748b; }
+.nothing-analog-clock-widget.accent-slate .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-slate .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-slate .nothing-media-button.primary,
+.nothing-system-widget.accent-slate .nothing-system-progress-fill { background-color: #64748b; }
+
+.nothing-date-widget.accent-graphite .nothing-date-day,
+.nothing-digital-clock-widget.accent-graphite .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-graphite .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-graphite .nothing-weather-symbol,
+.nothing-media-widget.accent-graphite .nothing-media-player,
+.nothing-system-widget.accent-graphite .nothing-system-title { color: #404040; }
+.nothing-analog-clock-widget.accent-graphite .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-graphite .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-graphite .nothing-media-button.primary,
+.nothing-system-widget.accent-graphite .nothing-system-progress-fill { background-color: #404040; }
+
+.nothing-date-widget.accent-white .nothing-date-day,
+.nothing-digital-clock-widget.accent-white .nothing-world-clock-city,
+.nothing-digital-clock-widget.accent-white .nothing-world-clock-abbrev,
+.nothing-weather-widget.accent-white .nothing-weather-symbol,
+.nothing-media-widget.accent-white .nothing-media-player,
+.nothing-system-widget.accent-white .nothing-system-title { color: #f0f0e6; }
+.nothing-analog-clock-widget.accent-white .nothing-analog-clock-hand.second,
+.nothing-analog-clock-widget.accent-white .nothing-analog-clock-second-dot,
+.nothing-media-widget.accent-white .nothing-media-button.primary,
+.nothing-system-widget.accent-white .nothing-system-progress-fill { background-color: #f0f0e6; }

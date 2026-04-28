@@ -13,6 +13,11 @@ const WEATHER_WIDGET_CONFIG = {
     minHeight: 160,
     maxWidth: 680,
     maxHeight: 420,
+    enabledKey: 'weather-enabled',
+    themeKey: 'weather-theme-mode',
+    accentKey: 'weather-use-system-accent',
+    accentColorKey: 'weather-accent-color',
+    customColorKey: 'weather-custom-accent-color',
     xKey: 'weather-x',
     yKey: 'weather-y',
     widthKey: 'weather-width',
@@ -21,6 +26,7 @@ const WEATHER_WIDGET_CONFIG = {
 };
 
 const TEMPERATURE_CELSIUS = 0;
+const TEMPERATURE_FAHRENHEIT = 1;
 const REFRESH_INTERVAL_SECONDS = 30 * 60;
 
 function getWeatherCondition(code) {
@@ -199,7 +205,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
             return;
         }
 
-        const legacyLocation = this._settings.get_string('weather-location').trim();
+        const legacyLocation = this._getStringSetting('weather-location', '').trim();
         if (legacyLocation && legacyLocation !== 'Villupuram') {
             this._setLoadingState();
             this._geocodeLocation(legacyLocation, serial);
@@ -213,9 +219,9 @@ export class WeatherDesktopWidget extends DesktopWidget {
     }
 
     _getSelectedPlace() {
-        const name = this._settings.get_string('weather-location-name').trim();
-        const latitude = this._settings.get_double('weather-latitude');
-        const longitude = this._settings.get_double('weather-longitude');
+        const name = this._getStringSetting('weather-location-name', '').trim();
+        const latitude = this._getDoubleSetting('weather-latitude', 0);
+        const longitude = this._getDoubleSetting('weather-longitude', 0);
 
         if (!name || !Number.isFinite(latitude) || !Number.isFinite(longitude))
             return null;
@@ -224,7 +230,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
             name,
             latitude,
             longitude,
-            timezone: this._settings.get_string('weather-time-zone').trim(),
+            timezone: this._getStringSetting('weather-time-zone', '').trim(),
         };
     }
 
@@ -250,7 +256,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
     }
 
     _fetchForecast(place, serial) {
-        const unit = this._settings.get_int('weather-temperature-unit') === TEMPERATURE_CELSIUS ? 'celsius' : 'fahrenheit';
+        const unit = this._getIntSetting('weather-temperature-unit', TEMPERATURE_FAHRENHEIT) === TEMPERATURE_CELSIUS ? 'celsius' : 'fahrenheit';
         const timezone = place.timezone ? encodeURIComponent(place.timezone) : 'auto';
         const url = 'https://api.open-meteo.com/v1/forecast?' +
             `latitude=${place.latitude}&longitude=${place.longitude}` +
@@ -328,8 +334,8 @@ export class WeatherDesktopWidget extends DesktopWidget {
 
         this._symbolLabel.text = '☁';
         this._temperatureLabel.text = '--°';
-        this._locationLabel.text = this._settings.get_string('weather-location-name') ||
-            this._settings.get_string('weather-location') ||
+        this._locationLabel.text = this._getStringSetting('weather-location-name', '') ||
+            this._getStringSetting('weather-location', '') ||
             'Weather';
         this._conditionLabel.text = 'Loading...';
         this._highLowLabel.text = '';
@@ -351,7 +357,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
         if (!this._statusLabel)
             return;
 
-        const unitSymbol = this._settings.get_int('weather-temperature-unit') === TEMPERATURE_CELSIUS ? '°C' : '°F';
+        const unitSymbol = this._getIntSetting('weather-temperature-unit', TEMPERATURE_FAHRENHEIT) === TEMPERATURE_CELSIUS ? '°C' : '°F';
         this._symbolLabel.text = getWeatherSymbol(data.code);
         this._temperatureLabel.text = `${data.temperature}°`;
         this._locationLabel.text = data.location;

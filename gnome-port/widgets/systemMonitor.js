@@ -15,6 +15,11 @@ const SYSTEM_WIDGET_CONFIG = {
     minHeight: 180,
     maxWidth: 720,
     maxHeight: 430,
+    enabledKey: 'system-enabled',
+    themeKey: 'system-theme-mode',
+    accentKey: 'system-use-system-accent',
+    accentColorKey: 'system-accent-color',
+    customColorKey: 'system-custom-accent-color',
     xKey: 'system-x',
     yKey: 'system-y',
     widthKey: 'system-width',
@@ -505,7 +510,7 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         if (!this._listBox || !this._chartGrid)
             return;
 
-        const chartStyle = this._settings.get_int('system-monitor-style') === STYLE_CHART;
+        const chartStyle = this._getIntSetting('system-monitor-style', STYLE_LIST) === STYLE_CHART;
         this._listBox.visible = !chartStyle;
         this._chartGrid.visible = chartStyle;
         this._subtitleLabel.text = chartStyle ? 'CHARTS' : 'LIVE';
@@ -516,9 +521,9 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         const trackColor = this._isLightThemeEnabled()
             ? [0.10, 0.10, 0.10, 0.14]
             : [1, 1, 1, 0.14];
-        const fillColor = this._isLightThemeEnabled()
-            ? [0.851, 0.176, 0.176, 0.95]
-            : [1, 0.2667, 0.2667, 0.95];
+        const fillColor = this._getBooleanSetting(this._config.accentKey, false)
+            ? [0.21, 0.48, 0.88, 0.95]
+            : this._getAccentRgba(0.95);
 
         for (const chart of [this._cpuChart, this._memoryChart, this._networkChart, this._diskChart])
             chart?.setColors(trackColor, fillColor);
@@ -565,7 +570,7 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         const width = this._actor.width || this._config.defaultWidth;
         const height = this._actor.height || this._config.defaultHeight;
         const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.72, 1.75);
-        const chartStyle = this._settings.get_int('system-monitor-style') === STYLE_CHART;
+        const chartStyle = this._getIntSetting('system-monitor-style', STYLE_LIST) === STYLE_CHART;
         const chartSize = Math.max(66, Math.min((width - 64) / 2, (height - 86) / 2));
 
         this._card.set_style(`padding: ${Math.round((chartStyle ? 14 : 17) * scale)}px; spacing: ${Math.round((chartStyle ? 8 : 9) * scale)}px; border-radius: ${Math.round(20 * scale)}px;`);

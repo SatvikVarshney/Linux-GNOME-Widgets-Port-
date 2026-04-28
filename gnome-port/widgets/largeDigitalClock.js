@@ -12,6 +12,11 @@ const LARGE_CLOCK_WIDGET_CONFIG = {
     minHeight: 130,
     maxWidth: 760,
     maxHeight: 320,
+    enabledKey: 'large-clock-enabled',
+    themeKey: 'large-clock-theme-mode',
+    accentKey: 'large-clock-use-system-accent',
+    accentColorKey: 'large-clock-accent-color',
+    customColorKey: 'large-clock-custom-accent-color',
     xKey: 'large-clock-x',
     yKey: 'large-clock-y',
     widthKey: 'large-clock-width',
@@ -93,7 +98,7 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
         let hours = now.get_hour();
         const minutes = now.get_minute();
 
-        if (!this._settings.get_boolean('clock-use-24-hour')) {
+        if (!this._getBooleanSetting('clock-use-24-hour', true)) {
             hours %= 12;
             if (hours === 0)
                 hours = 12;
@@ -108,7 +113,7 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
         if (!this._dateLabel)
             return;
 
-        this._dateLabel.visible = this._settings.get_boolean('large-clock-show-date');
+        this._dateLabel.visible = this._getBooleanSetting('large-clock-show-date', true);
         this._applySizeStyles();
     }
 
@@ -118,7 +123,7 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
 
         const width = this._actor.width || this._config.defaultWidth;
         const height = this._actor.height || this._config.defaultHeight;
-        const showDate = this._settings.get_boolean('large-clock-show-date');
+        const showDate = this._getBooleanSetting('large-clock-show-date', true);
         const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.65, 1.7);
         const dateSize = Math.round(20 * scale);
         const timeSize = Math.round((showDate ? 88 : 104) * scale);

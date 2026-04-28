@@ -12,6 +12,11 @@ const CLOCK_WIDGET_CONFIG = {
     minHeight: 110,
     maxWidth: 560,
     maxHeight: 360,
+    enabledKey: 'clock-enabled',
+    themeKey: 'clock-theme-mode',
+    accentKey: 'clock-use-system-accent',
+    accentColorKey: 'clock-accent-color',
+    customColorKey: 'clock-custom-accent-color',
     xKey: 'clock-x',
     yKey: 'clock-y',
     widthKey: 'clock-width',
@@ -263,7 +268,7 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
         let hours = localNow.get_hour();
         const minutes = localNow.get_minute();
 
-        if (!this._settings.get_boolean('clock-use-24-hour')) {
+        if (!this._getBooleanSetting('clock-use-24-hour', true)) {
             hours %= 12;
             if (hours === 0)
                 hours = 12;
@@ -291,9 +296,9 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
         if (!this._worldCityLabel || !this._worldTimeLabel || !this._worldMetaLabel)
             return;
 
-        const timeZone = this._settings.get_string('world-clock-time-zone') || 'Asia/Kolkata';
-        const cityName = this._settings.get_string('world-clock-city-name') || 'New Delhi';
-        const use24Hour = this._settings.get_boolean('clock-use-24-hour');
+        const timeZone = this._getStringSetting('world-clock-time-zone', 'Asia/Kolkata') || 'Asia/Kolkata';
+        const cityName = this._getStringSetting('world-clock-city-name', 'New Delhi') || 'New Delhi';
+        const use24Hour = this._getBooleanSetting('clock-use-24-hour', true);
         const parts = this._getTimeParts(now, timeZone, use24Hour);
         const diffText = this._getHourDifferenceText(now, timeZone);
 
@@ -393,7 +398,7 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
         const width = this._actor.width || this._config.defaultWidth;
         const height = this._actor.height || this._config.defaultHeight;
         const isPillMode = width / height >= 1.8;
-        const isWorldClock = this._settings.get_int('clock-widget-variant') === CLOCK_VARIANT_WORLD;
+        const isWorldClock = this._getIntSetting('clock-widget-variant', CLOCK_VARIANT_DIGITAL) === CLOCK_VARIANT_WORLD;
 
         this._squareContainer.visible = !isWorldClock && !isPillMode;
         this._pillContainer.visible = !isWorldClock && isPillMode;
