@@ -17,6 +17,7 @@ const CLOCK_WIDGET_CONFIG = {
     accentKey: 'clock-use-system-accent',
     accentColorKey: 'clock-accent-color',
     customColorKey: 'clock-custom-accent-color',
+    opacityKey: 'clock-opacity',
     xKey: 'clock-x',
     yKey: 'clock-y',
     widthKey: 'clock-width',
@@ -56,16 +57,12 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
             return GLib.SOURCE_CONTINUE;
         });
 
-        this._settingsSignalIds.push(
-            this._settings.connect('changed::clock-use-24-hour', () => this._updateTime())
-        );
+        this._connectSetting('clock-use-24-hour', () => this._updateTime());
         for (const key of ['clock-widget-variant', 'world-clock-time-zone', 'world-clock-city-name']) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${key}`, () => {
-                    this._updateTime();
-                    this._applySizeStyles();
-                })
-            );
+            this._connectSetting(key, () => {
+                this._updateTime();
+                this._applySizeStyles();
+            });
         }
     }
 
@@ -109,6 +106,7 @@ export class DigitalClockDesktopWidget extends DesktopWidget {
         card.add_child(this._pillContainer);
         card.add_child(this._worldContainer);
         this._actor.add_child(card);
+        this._registerBackgroundActor(card);
 
         this._addResizeHandle('nothing-widget-resize-handle');
     }

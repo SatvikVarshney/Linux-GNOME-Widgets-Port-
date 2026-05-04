@@ -22,6 +22,7 @@ const PHOTO_WIDGET_CONFIG = {
     accentKey: 'photo-use-system-accent',
     accentColorKey: 'photo-accent-color',
     customColorKey: 'photo-custom-accent-color',
+    opacityKey: 'photo-opacity',
     xKey: 'photo-x',
     yKey: 'photo-y',
     widthKey: 'photo-width',
@@ -167,13 +168,12 @@ export class PhotoDesktopWidget extends DesktopWidget {
             'photo-image-fill-mode',
             'photo-grayscale-enabled',
         ]) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${key}`, () => {
-                    this._syncImage();
-                    this._resizeToImageAspectRatio(true);
-                    this._applySizeStyles();
-                })
-            );
+            this._connectSetting(key, () => {
+                this._syncImage();
+                this._resizeToImageAspectRatio(true);
+                this._applySizeStyles();
+                this._applyOpacity();
+            });
         }
     }
 
@@ -243,6 +243,7 @@ export class PhotoDesktopWidget extends DesktopWidget {
         this._content.add_child(this._placeholder);
         this._frame.add_child(this._content);
         this._actor.add_child(this._frame);
+        this._registerBackgroundActor(this._frame);
 
         this._addResizeHandle('nothing-widget-resize-handle');
         this._syncImage();

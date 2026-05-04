@@ -17,6 +17,7 @@ const DATE_WIDGET_CONFIG = {
     accentKey: 'date-use-system-accent',
     accentColorKey: 'date-accent-color',
     customColorKey: 'date-custom-accent-color',
+    opacityKey: 'date-opacity',
     xKey: 'widget-x',
     yKey: 'widget-y',
     widthKey: 'widget-width',
@@ -90,6 +91,7 @@ export class DateDesktopWidget extends DesktopWidget {
         card.add_child(topRow);
         card.add_child(dateContainer);
         this._actor.add_child(card);
+        this._registerBackgroundActor(card);
 
         this._addResizeHandle('nothing-date-resize-handle');
     }

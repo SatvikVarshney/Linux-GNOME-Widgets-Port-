@@ -23,11 +23,13 @@ const MEDIA_WIDGET_CONFIG = {
     accentKey: 'media-use-system-accent',
     accentColorKey: 'media-accent-color',
     customColorKey: 'media-custom-accent-color',
+    opacityKey: 'media-opacity',
     xKey: 'media-x',
     yKey: 'media-y',
     widthKey: 'media-width',
     heightKey: 'media-height',
     resizable: true,
+    refreshable: true,
 };
 
 const MPRIS_PREFIX = 'org.mpris.MediaPlayer2.';
@@ -198,6 +200,7 @@ export class MediaDesktopWidget extends DesktopWidget {
         this._timeLabel = null;
         this._progressTrack = null;
         this._progressFill = null;
+        this._controls = null;
         this._previousButton = null;
         this._playPauseButton = null;
         this._nextButton = null;
@@ -251,6 +254,7 @@ export class MediaDesktopWidget extends DesktopWidget {
         this._timeLabel = null;
         this._progressTrack = null;
         this._progressFill = null;
+        this._controls = null;
         this._previousButton = null;
         this._playPauseButton = null;
         this._nextButton = null;
@@ -330,29 +334,35 @@ export class MediaDesktopWidget extends DesktopWidget {
         progressBox.add_child(this._progressTrack);
         progressBox.add_child(this._timeLabel);
 
-        const controls = new St.BoxLayout({
+        this._controls = new St.BoxLayout({
             style_class: 'nothing-media-controls',
-            x_align: Clutter.ActorAlign.START,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this._previousButton = this._createControlButton('media-skip-backward-symbolic');
         this._playPauseButton = this._createControlButton('media-playback-start-symbolic', true);
         this._nextButton = this._createControlButton('media-skip-forward-symbolic');
-        controls.add_child(this._previousButton);
-        controls.add_child(this._playPauseButton);
-        controls.add_child(this._nextButton);
+        this._controls.add_child(this._previousButton);
+        this._controls.add_child(this._playPauseButton);
+        this._controls.add_child(this._nextButton);
 
         infoBox.add_child(this._playerLabel);
         infoBox.add_child(this._titleLabel);
         infoBox.add_child(this._artistLabel);
         infoBox.add_child(progressBox);
-        infoBox.add_child(controls);
+        infoBox.add_child(this._controls);
 
         this._card.add_child(this._artFrame);
         this._card.add_child(infoBox);
         this._actor.add_child(this._card);
+        this._registerBackgroundActor(this._card);
 
         this._addResizeHandle('nothing-widget-resize-handle');
         this._syncUi();
+    }
+
+    refresh() {
+        this._refreshPlayers();
     }
 
     _createControlButton(iconName, primary = false) {
@@ -674,18 +684,6 @@ export class MediaDesktopWidget extends DesktopWidget {
         return false;
     }
 
-    _isPointInsideActor(stageX, stageY, actor) {
-        if (!actor || !actor.visible)
-            return false;
-
-        const [actorX, actorY] = actor.get_transformed_position();
-        const [actorWidth, actorHeight] = actor.get_transformed_size();
-        return stageX >= actorX &&
-            stageX <= actorX + actorWidth &&
-            stageY >= actorY &&
-            stageY <= actorY + actorHeight;
-    }
-
     _applySizeStyles() {
         if (!this._actor || !this._card || !this._artFrame)
             return;
@@ -702,6 +700,7 @@ export class MediaDesktopWidget extends DesktopWidget {
         const safeArtSize = Number.isFinite(artSize) ? Math.max(1, artSize) : 90;
         const buttonSize = Math.round(34 * scale);
         const primaryButtonSize = Math.round(44 * scale);
+        const controlsWidth = (buttonSize * 2) + primaryButtonSize + Math.round(24 * scale);
         const radius = Math.round(18 * scale);
 
         this._card.vertical = !horizontal;
@@ -717,6 +716,8 @@ export class MediaDesktopWidget extends DesktopWidget {
         this._timeLabel.set_style(`font-size: ${Math.round(10 * scale)}px;`);
 
         this._progressTrack.set_height(Math.max(4, Math.round(5 * scale)));
+        this._controls.set_style(`spacing: ${Math.round(12 * scale)}px;`);
+        this._controls.set_width(controlsWidth);
         this._previousButton.set_size(buttonSize, buttonSize);
         this._nextButton.set_size(buttonSize, buttonSize);
         this._playPauseButton.set_size(primaryButtonSize, primaryButtonSize);

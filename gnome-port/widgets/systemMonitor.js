@@ -20,16 +20,19 @@ const SYSTEM_WIDGET_CONFIG = {
     accentKey: 'system-use-system-accent',
     accentColorKey: 'system-accent-color',
     customColorKey: 'system-custom-accent-color',
+    opacityKey: 'system-opacity',
     xKey: 'system-x',
     yKey: 'system-y',
     widthKey: 'system-width',
     heightKey: 'system-height',
     resizable: true,
+    refreshable: true,
 };
 
 const UPDATE_INTERVAL_SECONDS = 1;
 const STYLE_LIST = 0;
 const STYLE_CHART = 1;
+const MIN_CHART_RING_SIZE = 58;
 const BYTES_PER_KIB = 1024;
 const BYTES_PER_MIB = BYTES_PER_KIB * 1024;
 const BYTES_PER_GIB = BYTES_PER_MIB * 1024;
@@ -308,12 +311,12 @@ class MetricChart {
     }
 
     setScale(scale, size) {
-        const ringSize = Math.round(size);
+        const ringSize = Math.max(1, Math.round(size));
         this.ringBox.set_size(ringSize, ringSize);
         this.ring.set_size(ringSize, ringSize);
-        this.ring.setLineWidth(Math.max(7, Math.round(10 * scale)));
-        this.valueLabel.set_style(`font-size: ${Math.round(18 * scale)}px;`);
-        this.titleLabel.set_style(`font-size: ${Math.round(10 * scale)}px;`);
+        this.ring.setLineWidth(Math.max(5, Math.min(Math.round(ringSize * 0.15), Math.round(10 * scale))));
+        this.valueLabel.set_style(`font-size: ${Math.max(10, Math.min(Math.round(18 * scale), Math.round(ringSize * 0.28)))}px;`);
+        this.titleLabel.set_style(`font-size: ${Math.max(8, Math.round(10 * scale))}px;`);
     }
 
     setColors(trackColor, fillColor) {
@@ -352,12 +355,11 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
             return GLib.SOURCE_CONTINUE;
         });
 
-        this._settingsSignalIds.push(
-            this._settings.connect('changed::system-monitor-style', () => {
-                this._syncStyle();
-                this._applySizeStyles();
-            })
-        );
+        this._connectSetting('system-monitor-style', () => {
+            this._syncStyle();
+            this._applySizeStyles();
+            this._applyOpacity();
+        });
     }
 
     disable() {
@@ -464,10 +466,17 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         this._card.add_child(this._listBox);
         this._card.add_child(this._chartGrid);
         this._actor.add_child(this._card);
+        this._registerBackgroundActor(this._card);
 
         this._addResizeHandle('nothing-widget-resize-handle');
         this._setPlaceholderMetrics();
         this._syncStyle();
+    }
+
+    refresh() {
+        this._previousCpu = null;
+        this._previousNetwork = null;
+        this._updateMetrics();
     }
 
     _setPlaceholderMetrics() {
@@ -510,11 +519,37 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         if (!this._listBox || !this._chartGrid)
             return;
 
-        const chartStyle = this._getIntSetting('system-monitor-style', STYLE_LIST) === STYLE_CHART;
+        const chartStyle = this._shouldUseChartStyle();
         this._listBox.visible = !chartStyle;
         this._chartGrid.visible = chartStyle;
         this._subtitleLabel.text = chartStyle ? 'CHARTS' : 'LIVE';
         this._syncChartColors();
+    }
+
+    _shouldUseChartStyle() {
+        if (this._getIntSetting('system-monitor-style', STYLE_LIST) !== STYLE_CHART)
+            return false;
+
+        if (!this._actor)
+            return true;
+
+        const width = this._actor.width || this._config.defaultWidth;
+        const height = this._actor.height || this._config.defaultHeight;
+        return this._computeChartSize(width, height) >= MIN_CHART_RING_SIZE;
+    }
+
+    _computeChartSize(width, height) {
+        const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.72, 1.75);
+        const padding = Math.round(14 * scale);
+        const headerHeight = Math.round(26 * scale);
+        const headerGap = Math.round(10 * scale);
+        const rowGap = Math.round(10 * scale);
+        const titleHeight = Math.round(18 * scale);
+        const chartGap = Math.round(5 * scale);
+        const availableWidth = width - padding * 2 - rowGap;
+        const availableHeight = height - padding * 2 - headerHeight - headerGap - chartGap * 2 - titleHeight * 2;
+
+        return Math.floor(Math.min(availableWidth / 2, availableHeight / 2));
     }
 
     _syncChartColors() {
@@ -570,8 +605,9 @@ export class SystemMonitorDesktopWidget extends DesktopWidget {
         const width = this._actor.width || this._config.defaultWidth;
         const height = this._actor.height || this._config.defaultHeight;
         const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.72, 1.75);
-        const chartStyle = this._getIntSetting('system-monitor-style', STYLE_LIST) === STYLE_CHART;
-        const chartSize = Math.max(66, Math.min((width - 64) / 2, (height - 86) / 2));
+        const chartStyle = this._shouldUseChartStyle();
+        const rawChartSize = this._computeChartSize(width, height);
+        const chartSize = Math.max(MIN_CHART_RING_SIZE, rawChartSize);
 
         this._card.set_style(`padding: ${Math.round((chartStyle ? 14 : 17) * scale)}px; spacing: ${Math.round((chartStyle ? 8 : 9) * scale)}px; border-radius: ${Math.round(20 * scale)}px;`);
         this._titleLabel.set_style(`font-size: ${Math.round(17 * scale)}px;`);

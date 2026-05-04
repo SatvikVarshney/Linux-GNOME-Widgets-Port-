@@ -28,6 +28,12 @@
       <summary>Date widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when date-accent-color is -1.</description>
     </key>
+    <key name="date-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Date widget opacity</summary>
+      <description>Opacity percentage for the date widget.</description>
+    </key>
     <key name="widget-x" type="i">
       <default>120</default>
       <summary>Date widget X position</summary>
@@ -81,6 +87,12 @@
       <default>'#ff4444'</default>
       <summary>Digital clock widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when clock-accent-color is -1.</description>
+    </key>
+    <key name="clock-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Digital clock widget opacity</summary>
+      <description>Opacity percentage for the digital clock widget.</description>
     </key>
     <key name="clock-y" type="i">
       <default>120</default>
@@ -152,6 +164,12 @@
       <summary>Large digital clock widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when large-clock-accent-color is -1.</description>
     </key>
+    <key name="large-clock-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Large digital clock widget opacity</summary>
+      <description>Opacity percentage for the large digital clock widget.</description>
+    </key>
     <key name="large-clock-y" type="i">
       <default>370</default>
       <summary>Large digital clock Y position</summary>
@@ -205,6 +223,12 @@
       <default>'#ff4444'</default>
       <summary>Analog clock widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when analog-clock-accent-color is -1.</description>
+    </key>
+    <key name="analog-clock-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Analog clock widget opacity</summary>
+      <description>Opacity percentage for the analog clock widget.</description>
     </key>
     <key name="analog-clock-y" type="i">
       <default>360</default>
@@ -260,6 +284,12 @@
       <default>'#ff4444'</default>
       <summary>Photo widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when photo-accent-color is -1.</description>
+    </key>
+    <key name="photo-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Photo widget opacity</summary>
+      <description>Opacity percentage for the photo widget.</description>
     </key>
     <key name="photo-y" type="i">
       <default>360</default>
@@ -342,6 +372,12 @@
       <summary>Weather widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when weather-accent-color is -1.</description>
     </key>
+    <key name="weather-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Weather widget opacity</summary>
+      <description>Opacity percentage for the weather widget.</description>
+    </key>
     <key name="weather-y" type="i">
       <default>360</default>
       <summary>Weather widget Y position</summary>
@@ -422,6 +458,12 @@
       <summary>Media widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when media-accent-color is -1.</description>
     </key>
+    <key name="media-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>Media widget opacity</summary>
+      <description>Opacity percentage for the media widget.</description>
+    </key>
     <key name="media-y" type="i">
       <default>620</default>
       <summary>Media widget Y position</summary>
@@ -470,6 +512,12 @@
       <default>'#ff4444'</default>
       <summary>System monitor widget custom accent color</summary>
       <description>Custom #rrggbb accent color used when system-accent-color is -1.</description>
+    </key>
+    <key name="system-opacity" type="i">
+      <range min="20" max="100"/>
+      <default>100</default>
+      <summary>System monitor widget opacity</summary>
+      <description>Opacity percentage for the system monitor widget.</description>
     </key>
     <key name="system-y" type="i">
       <default>620</default>

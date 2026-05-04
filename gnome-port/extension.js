@@ -1,3 +1,6 @@
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {DateDesktopWidget} from './widgets/date.js';
@@ -18,9 +21,30 @@ function getBooleanSetting(settings, key, fallback) {
     }
 }
 
+function connectSettingChanged(settings, key, callback) {
+    try {
+        if (!(settings.settings_schema?.has_key(key) ?? true)) {
+            log(`GNOME Widgets: skipping signal for missing setting ${key}`);
+            return 0;
+        }
+
+        return settings.connect(`changed::${key}`, callback);
+    } catch (error) {
+        log(`GNOME Widgets: failed to connect setting ${key}: ${error}`);
+        return 0;
+    }
+}
+
+const AUTO_REFRESH_INTERVAL_SECONDS = 2 * 60 * 60;
+const RESUME_REFRESH_DELAYS_SECONDS = [3, 20, 60];
+
 export default class GNOMEWidgetsExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
+        this._systemBus = null;
+        this._sleepSignalId = 0;
+        this._autoRefreshTimeoutId = 0;
+        this._resumeRefreshTimeoutIds = [];
         this._widgetEntries = [
             {
                 key: 'date-enabled',
@@ -66,14 +90,35 @@ export default class GNOMEWidgetsExtension extends Extension {
         this._settingsSignalIds = [];
 
         for (const entry of this._widgetEntries) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${entry.key}`, () => this._syncWidget(entry))
-            );
+            const signalId = connectSettingChanged(this._settings, entry.key, () => this._syncWidget(entry));
+            if (signalId)
+                this._settingsSignalIds.push(signalId);
             this._syncWidget(entry);
         }
+
+        this._connectResumeRefresh();
+        this._autoRefreshTimeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, AUTO_REFRESH_INTERVAL_SECONDS, () => {
+            this._refreshWidgets('periodic');
+            return GLib.SOURCE_CONTINUE;
+        });
     }
 
     disable() {
+        if (this._autoRefreshTimeoutId) {
+            GLib.Source.remove(this._autoRefreshTimeoutId);
+            this._autoRefreshTimeoutId = 0;
+        }
+
+        for (const timeoutId of this._resumeRefreshTimeoutIds ?? [])
+            GLib.Source.remove(timeoutId);
+        this._resumeRefreshTimeoutIds = [];
+
+        if (this._systemBus && this._sleepSignalId) {
+            this._systemBus.signal_unsubscribe(this._sleepSignalId);
+            this._sleepSignalId = 0;
+        }
+        this._systemBus = null;
+
         if (this._settings && this._settingsSignalIds) {
             for (const signalId of this._settingsSignalIds)
                 this._settings.disconnect(signalId);
@@ -105,5 +150,51 @@ export default class GNOMEWidgetsExtension extends Extension {
 
         this[entry.property].disable();
         this[entry.property] = null;
+    }
+
+    _connectResumeRefresh() {
+        try {
+            this._systemBus = Gio.bus_get_sync(Gio.BusType.SYSTEM, null);
+            this._sleepSignalId = this._systemBus.signal_subscribe(
+                'org.freedesktop.login1',
+                'org.freedesktop.login1.Manager',
+                'PrepareForSleep',
+                '/org/freedesktop/login1',
+                null,
+                Gio.DBusSignalFlags.NONE,
+                (_connection, _sender, _path, _interfaceName, _signalName, parameters) => {
+                    const [sleeping] = parameters.deep_unpack();
+                    if (!sleeping)
+                        this._scheduleResumeRefreshes();
+                }
+            );
+        } catch (error) {
+            log(`GNOME Widgets: failed to watch suspend/resume: ${error}`);
+        }
+    }
+
+    _scheduleResumeRefreshes() {
+        for (const timeoutId of this._resumeRefreshTimeoutIds)
+            GLib.Source.remove(timeoutId);
+        this._resumeRefreshTimeoutIds = [];
+
+        for (const delaySeconds of RESUME_REFRESH_DELAYS_SECONDS) {
+            const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, delaySeconds, () => {
+                this._resumeRefreshTimeoutIds = this._resumeRefreshTimeoutIds.filter(id => id !== timeoutId);
+                this._refreshWidgets(`resume-${delaySeconds}s`);
+                return GLib.SOURCE_REMOVE;
+            });
+            this._resumeRefreshTimeoutIds.push(timeoutId);
+        }
+    }
+
+    _refreshWidgets(reason) {
+        for (const entry of this._widgetEntries ?? []) {
+            try {
+                this[entry.property]?.refresh?.();
+            } catch (error) {
+                log(`GNOME Widgets: failed ${reason} refresh for ${entry.property}: ${error}`);
+            }
+        }
     }
 }

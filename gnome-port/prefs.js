@@ -36,26 +36,49 @@ const ACCENT_COLORS = [
 
 const WIDGETS = [
     {
+        type: 'date',
         id: 'date',
+        name: 'Date',
         title: 'Date',
         description: 'Day and date card',
+        Component: renderDatePreview,
+        defaultSize: [220, 220],
+        minSize: [150, 150],
+        previewSize: [216, 150],
+        defaultConfig: {},
+        previewConfig: {},
+        previewData: {day: 'Tue', date: '28'},
         enabledKey: 'date-enabled',
         themeKey: 'date-theme-mode',
         accentKey: 'date-use-system-accent',
         accentColorKey: 'date-accent-color',
         customColorKey: 'date-custom-accent-color',
-        previewKind: 'date',
+        opacityKey: 'date-opacity',
     },
     {
+        type: 'clock',
         id: 'clock',
+        name: 'Digital Clock',
         title: 'Digital Clock',
         description: 'Local or world time',
+        Component: renderClockPreview,
+        defaultSize: [340, 160],
+        minSize: [180, 110],
+        previewSize: [216, 150],
+        defaultConfig: {variant: 0},
+        previewConfig: {},
+        previewData: {
+            time: '12:58',
+            worldCity: 'Tokyo',
+            worldTime: '22:58',
+            worldMeta: 'Tue  3h ahead',
+        },
         enabledKey: 'clock-enabled',
         themeKey: 'clock-theme-mode',
         accentKey: 'clock-use-system-accent',
         accentColorKey: 'clock-accent-color',
         customColorKey: 'clock-custom-accent-color',
-        previewKind: 'clock',
+        opacityKey: 'clock-opacity',
         variantKey: 'clock-widget-variant',
         variants: [
             {label: 'Digital Clock', value: 0},
@@ -63,15 +86,24 @@ const WIDGETS = [
         ],
     },
     {
+        type: 'large-clock',
         id: 'large-clock',
+        name: 'Large Clock',
         title: 'Large Clock',
         description: 'Oversized desktop time',
+        Component: renderLargeClockPreview,
+        defaultSize: [470, 190],
+        minSize: [300, 130],
+        previewSize: [216, 150],
+        defaultConfig: {showDate: true},
+        previewConfig: {},
+        previewData: {date: 'Tue, 28 Apr', time: '12:58'},
         enabledKey: 'large-clock-enabled',
         themeKey: 'large-clock-theme-mode',
         accentKey: 'large-clock-use-system-accent',
         accentColorKey: 'large-clock-accent-color',
         customColorKey: 'large-clock-custom-accent-color',
-        previewKind: 'large-clock',
+        opacityKey: 'large-clock-opacity',
         variantKey: 'large-clock-show-date',
         variants: [
             {label: 'With Date', value: true},
@@ -79,15 +111,24 @@ const WIDGETS = [
         ],
     },
     {
+        type: 'analog-clock',
         id: 'analog-clock',
+        name: 'Analog Clock',
         title: 'Analog Clock',
         description: 'Swiss or minimal face',
+        Component: renderAnalogClockPreview,
+        defaultSize: [240, 240],
+        minSize: [160, 160],
+        previewSize: [216, 150],
+        defaultConfig: {style: 0},
+        previewConfig: {},
+        previewData: {},
         enabledKey: 'analog-clock-enabled',
         themeKey: 'analog-clock-theme-mode',
         accentKey: 'analog-clock-use-system-accent',
         accentColorKey: 'analog-clock-accent-color',
         customColorKey: 'analog-clock-custom-accent-color',
-        previewKind: 'analog-clock',
+        opacityKey: 'analog-clock-opacity',
         variantKey: 'analog-clock-style',
         variants: [
             {label: 'Swiss Railway', value: 0},
@@ -95,54 +136,97 @@ const WIDGETS = [
         ],
     },
     {
+        type: 'photo',
         id: 'photo',
+        name: 'Photo Frame',
         title: 'Photo Frame',
         description: 'Image, crop, fit, pill',
+        Component: renderPhotoPreview,
+        defaultSize: [240, 240],
+        minSize: [140, 140],
+        previewSize: [216, 150],
+        defaultConfig: {pillShape: false, fillMode: 0},
+        previewConfig: {},
+        previewData: {},
         enabledKey: 'photo-enabled',
         themeKey: 'photo-theme-mode',
         accentKey: 'photo-use-system-accent',
         accentColorKey: 'photo-accent-color',
         customColorKey: 'photo-custom-accent-color',
-        previewKind: 'photo',
-        variantKey: 'photo-image-fill-mode',
+        opacityKey: 'photo-opacity',
+        variantKey: 'photo-pill-shape-enabled',
         variants: [
-            {label: 'Crop', value: 0},
-            {label: 'Fit', value: 1},
-            {label: 'Stretch', value: 2},
+            {label: 'Standard Corners', value: false},
+            {label: 'Pill Shape', value: true},
         ],
     },
     {
+        type: 'weather',
         id: 'weather',
+        name: 'Weather',
         title: 'Weather',
         description: 'Open-Meteo conditions',
+        Component: renderWeatherPreview,
+        defaultSize: [260, 210],
+        minSize: [190, 160],
+        previewSize: [216, 150],
+        defaultConfig: {},
+        previewConfig: {},
+        previewData: {symbol: '☀', temperature: '28°', location: 'Kolkata', condition: 'Clear'},
         enabledKey: 'weather-enabled',
         themeKey: 'weather-theme-mode',
         accentKey: 'weather-use-system-accent',
         accentColorKey: 'weather-accent-color',
         customColorKey: 'weather-custom-accent-color',
-        previewKind: 'weather',
+        opacityKey: 'weather-opacity',
     },
     {
+        type: 'media',
         id: 'media',
+        name: 'Media',
         title: 'Media',
         description: 'MPRIS player controls',
+        Component: renderMediaPreview,
+        defaultSize: [360, 210],
+        minSize: [260, 150],
+        previewSize: [216, 150],
+        defaultConfig: {},
+        previewConfig: {},
+        previewData: {player: 'MEDIA', title: 'Track Title', artist: 'Artist', progress: 0.54},
         enabledKey: 'media-enabled',
         themeKey: 'media-theme-mode',
         accentKey: 'media-use-system-accent',
         accentColorKey: 'media-accent-color',
         customColorKey: 'media-custom-accent-color',
-        previewKind: 'media',
+        opacityKey: 'media-opacity',
     },
     {
+        type: 'system',
         id: 'system',
+        name: 'System Monitor',
         title: 'System Monitor',
         description: 'CPU, RAM, network, disk',
+        Component: renderSystemPreview,
+        defaultSize: [330, 230],
+        minSize: [250, 180],
+        previewSize: [216, 150],
+        defaultConfig: {style: 0},
+        previewConfig: {},
+        previewData: {
+            rows: ['CPU 42%', 'RAM 61%', 'NET 2.1M/s'],
+            charts: [
+                {label: 'CPU', value: '42%', ratio: 0.42},
+                {label: 'RAM', value: '61%', ratio: 0.61},
+                {label: 'NET', value: '2M', ratio: 0.38},
+                {label: 'DISK', value: '74%', ratio: 0.74},
+            ],
+        },
         enabledKey: 'system-enabled',
         themeKey: 'system-theme-mode',
         accentKey: 'system-use-system-accent',
         accentColorKey: 'system-accent-color',
         customColorKey: 'system-custom-accent-color',
-        previewKind: 'system',
+        opacityKey: 'system-opacity',
         variantKey: 'system-monitor-style',
         variants: [
             {label: 'Number List', value: 0},
@@ -228,6 +312,47 @@ function fetchWeatherLocations(session, query, callback) {
     });
 }
 
+function clearListBox(listBox) {
+    let child = listBox.get_first_child();
+    while (child) {
+        const next = child.get_next_sibling();
+        listBox.remove(child);
+        child = next;
+    }
+}
+
+function createWeatherResultRow(result) {
+    const row = new Gtk.ListBoxRow({
+        activatable: true,
+        selectable: true,
+    });
+    row.weatherResult = result;
+
+    const box = new Gtk.Box({
+        orientation: Gtk.Orientation.VERTICAL,
+        spacing: 2,
+        margin_top: 8,
+        margin_bottom: 8,
+        margin_start: 12,
+        margin_end: 12,
+    });
+    const title = new Gtk.Label({
+        label: result.name ?? formatWeatherLocation(result),
+        xalign: 0,
+    });
+    title.add_css_class('heading');
+    const subtitle = new Gtk.Label({
+        label: [result.admin1, result.country].filter(Boolean).join(', ') || result.timezone || 'Open-Meteo result',
+        xalign: 0,
+    });
+    subtitle.add_css_class('dim-label');
+
+    box.append(title);
+    box.append(subtitle);
+    row.set_child(box);
+    return row;
+}
+
 function createImageFileFilter() {
     const filter = new Gtk.FileFilter();
     filter.set_name('Images');
@@ -300,6 +425,28 @@ function parseColorInput(value, fallback = '#ff4444') {
     return fallback;
 }
 
+function tryParseColorInput(value) {
+    const text = String(value ?? '').trim();
+    const hexMatch = text.match(/^#?([0-9a-fA-F]{6})$/);
+
+    if (hexMatch)
+        return `#${hexMatch[1].toLowerCase()}`;
+
+    const rgbFunctionMatch = text.match(/^rgba?\(([^)]+)\)$/i);
+    const rgbPlainMatch = text.match(/^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/);
+    const parts = rgbFunctionMatch
+        ? rgbFunctionMatch[1].split(',').map(part => Number.parseInt(part.trim(), 10))
+        : rgbPlainMatch?.slice(1, 4).map(part => Number.parseInt(part, 10)) ?? [];
+
+    if (parts.length >= 3 && parts.slice(0, 3).every(part => Number.isInteger(part) && part >= 0 && part <= 255)) {
+        return `#${parts.slice(0, 3)
+            .map(part => part.toString(16).padStart(2, '0'))
+            .join('')}`;
+    }
+
+    return null;
+}
+
 function hexToRgb(hex) {
     const normalized = normalizeHexColor(hex);
     return [
@@ -343,118 +490,239 @@ function getAccentColor(settings, widget) {
     return ACCENT_COLORS[settings.get_int(widget.accentColorKey)]?.rgb ?? ACCENT_COLORS[0].rgb;
 }
 
-function drawPreview(context, width, height, widget, settings, variantOverride = null) {
+function getPreviewVariant(widget, settings, variantOverride = null) {
+    if (variantOverride !== null)
+        return variantOverride;
+
+    if (!widget.variantKey)
+        return null;
+
+    return typeof widget.variants?.[0]?.value === 'boolean'
+        ? settings.get_boolean(widget.variantKey)
+        : settings.get_int(widget.variantKey);
+}
+
+function getPreviewAppearance(widget, settings) {
     const theme = settings.get_int(widget.themeKey);
     const light = theme === THEME_LIGHT;
-    const background = light ? [0.96, 0.96, 0.94] : [0.10, 0.10, 0.10];
-    const text = light ? [0.10, 0.10, 0.10] : [1, 1, 1];
-    const muted = light ? [0.36, 0.36, 0.36] : [0.70, 0.70, 0.70];
-    const accent = getAccentColor(settings, widget);
-    const variant = variantOverride ?? (widget.variantKey
-        ? typeof widget.variants?.[0]?.value === 'boolean'
-            ? settings.get_boolean(widget.variantKey)
-            : settings.get_int(widget.variantKey)
-        : null);
+    return {
+        light,
+        background: light ? [0.96, 0.96, 0.94] : [0.10, 0.10, 0.10],
+        contentBackground: light ? [0.86, 0.86, 0.84] : [0.18, 0.18, 0.18],
+        text: light ? [0.10, 0.10, 0.10] : [1, 1, 1],
+        muted: light ? [0.36, 0.36, 0.36] : [0.70, 0.70, 0.70],
+        accent: getAccentColor(settings, widget),
+        opacity: widget.supportsTranslucence === false ? 1 : settings.get_int(widget.opacityKey) / 100,
+    };
+}
+
+function renderWidgetShell(context, width, height, appearance, radius = 22) {
+    context.save();
+    drawRoundedRectangle(context, 10, 10, width - 20, height - 20, radius);
+    setSourceRgb(context, appearance.background);
+    context.globalAlpha = appearance.opacity;
+    context.fill();
+    context.globalAlpha = 1;
+    context.restore();
 
     context.save();
-    drawRoundedRectangle(context, 10, 10, width - 20, height - 20, 22);
-    setSourceRgb(context, background);
-    context.fill();
+    drawRoundedRectangle(context, 10, 10, width - 20, height - 20, radius);
+    context.clip();
+}
 
-    switch (widget.previewKind) {
-    case 'date':
-        drawText(context, 'Tue', width - 66, 44, 18, accent);
-        drawText(context, '28', 48, height - 32, 70, text);
-        break;
-    case 'clock':
-        if (variant === 1) {
-            drawText(context, 'Tokyo', 34, 48, 19, accent);
-            drawText(context, '22:58', 34, 92, 42, text, 'Monospace');
-            drawText(context, 'Tue  3h ahead', 35, 120, 13, muted, 'Sans', 'normal');
-        } else {
-            drawText(context, '12:58', 30, 92, 54, text, 'Monospace');
-        }
-        break;
-    case 'large-clock':
-        if (variant)
-            drawText(context, 'Tue, 28 Apr', 34, 48, 16, muted);
-        drawText(context, '12:58', 30, 102, 52, text, 'Monospace');
-        break;
-    case 'analog-clock': {
-        const cx = width / 2;
-        const cy = height / 2;
-        const r = Math.min(width, height) * 0.33;
-        context.setLineWidth(4);
-        setSourceRgb(context, text);
-        context.arc(cx, cy, r, 0, Math.PI * 2);
-        context.stroke();
-        context.setLineWidth(5);
-        context.moveTo(cx, cy);
-        context.lineTo(cx - r * 0.2, cy - r * 0.44);
-        context.stroke();
-        context.moveTo(cx, cy);
-        context.lineTo(cx + r * 0.55, cy - r * 0.08);
-        context.stroke();
-        setSourceRgb(context, accent);
-        context.arc(cx, cy, variant === 1 ? 8 : 5, 0, Math.PI * 2);
-        context.fill();
-        break;
-    }
-    case 'photo':
-        drawRoundedRectangle(context, 34, 24, width - 68, height - 48, settings.get_boolean('photo-pill-shape-enabled') ? 999 : 18);
-        setSourceRgb(context, light ? [0.86, 0.86, 0.84] : [0.18, 0.18, 0.18]);
-        context.fill();
-        setSourceRgb(context, accent);
-        context.arc(width * 0.39, height * 0.42, 22, 0, Math.PI * 2);
-        context.fill();
-        setSourceRgb(context, muted);
-        context.moveTo(width * 0.25, height * 0.78);
-        context.lineTo(width * 0.48, height * 0.55);
-        context.lineTo(width * 0.62, height * 0.70);
-        context.lineTo(width * 0.76, height * 0.49);
-        context.lineTo(width * 0.88, height * 0.78);
-        context.closePath();
-        context.fill();
-        break;
-    case 'weather':
-        drawText(context, '☀', 32, 70, 42, accent);
-        drawText(context, '28°', width - 108, 70, 38, text, 'Monospace');
-        drawText(context, 'Kolkata', 35, 104, 16, muted);
-        drawText(context, 'Clear', 35, 128, 20, text);
-        break;
-    case 'media':
-        drawRoundedRectangle(context, 28, 34, 68, 68, 15);
-        setSourceRgb(context, light ? [0.84, 0.84, 0.82] : [0.18, 0.18, 0.18]);
-        context.fill();
-        drawText(context, 'MEDIA', 112, 48, 13, accent);
-        drawText(context, 'Track Title', 112, 74, 20, text);
-        drawText(context, 'Artist', 112, 98, 13, muted, 'Sans', 'normal');
-        drawRoundedRectangle(context, 112, 112, 82, 6, 3);
-        setSourceRgb(context, muted);
-        context.fill();
-        drawRoundedRectangle(context, 112, 112, 44, 6, 3);
-        setSourceRgb(context, text);
-        context.fill();
-        break;
-    case 'system':
-        drawText(context, 'SYSTEM', 30, 44, 16, accent);
-        if (variant === 1) {
-            for (const [index, label] of ['CPU', 'RAM', 'NET', 'DISK'].entries()) {
-                const x = 58 + (index % 2) * 92;
-                const y = 80 + Math.floor(index / 2) * 42;
-                setSourceRgb(context, muted);
-                context.arc(x, y, 16, 0, Math.PI * 2);
-                context.stroke();
-                drawText(context, label, x + 24, y + 5, 12, text);
-            }
-        } else {
-            for (const [index, label] of ['CPU 42%', 'RAM 61%', 'NET 2.1M/s'].entries())
-                drawText(context, label, 32, 76 + index * 24, 15, text, 'Sans', 'normal');
-        }
-        break;
-    }
-
+function drawCenteredText(context, text, centerX, baselineY, size, color, family = 'Sans', weight = 'bold') {
+    context.save();
+    setSourceRgb(context, color);
+    context.selectFontFace(family, 0, weight === 'bold' ? 1 : 0);
+    context.setFontSize(size);
+    const extents = context.textExtents(text);
+    context.moveTo(centerX - extents.width / 2 - extents.xBearing, baselineY);
+    context.showText(text);
     context.restore();
+}
+
+function renderDatePreview(context, width, height, {appearance, previewData}) {
+    renderWidgetShell(context, width, height, appearance);
+    drawText(context, previewData.day, width - 66, 44, 18, appearance.accent);
+    drawText(context, previewData.date, 48, height - 32, 70, appearance.text, 'NothingNDot');
+    context.restore();
+}
+
+function renderClockPreview(context, width, height, {appearance, previewData, variant}) {
+    renderWidgetShell(context, width, height, appearance, 20);
+    if (variant === 1) {
+        drawCenteredText(context, previewData.worldCity, width / 2, 46, 18, appearance.accent, 'NothingNType');
+        drawCenteredText(context, previewData.worldTime, width / 2, 91, 43, appearance.text, 'NothingNDot');
+        drawCenteredText(context, previewData.worldMeta, width / 2, 120, 13, appearance.muted, 'Sans', 'normal');
+    } else {
+        const [hours, minutes] = previewData.time.split(':');
+        const digitSize = Math.min(56, Math.max(42, width * 0.24));
+        const dotRadius = 3.5;
+        drawCenteredText(context, hours, width / 2 - 44, 92, digitSize, appearance.text, 'NothingNDot');
+        setSourceRgb(context, appearance.text);
+        context.arc(width / 2, 68, dotRadius, 0, Math.PI * 2);
+        context.fill();
+        context.arc(width / 2, 86, dotRadius, 0, Math.PI * 2);
+        context.fill();
+        drawCenteredText(context, minutes, width / 2 + 44, 92, digitSize, appearance.text, 'NothingNDot');
+    }
+    context.restore();
+}
+
+function renderLargeClockPreview(context, width, height, {appearance, previewData, variant}) {
+    if (variant)
+        drawText(context, previewData.date, 34, 48, 16, appearance.muted);
+    drawText(context, previewData.time, 30, 102, 52, appearance.text, 'NothingNDot');
+}
+
+function renderAnalogClockPreview(context, width, height, {appearance, variant}) {
+    renderWidgetShell(context, width, height, appearance, 999);
+    const cx = width / 2;
+    const cy = height / 2;
+    const r = Math.min(width, height) * 0.33;
+    context.setLineWidth(variant === 1 ? 6 : 4);
+    setSourceRgb(context, appearance.text);
+    context.arc(cx, cy, r, 0, Math.PI * 2);
+    context.stroke();
+    context.setLineWidth(5);
+    context.moveTo(cx, cy);
+    context.lineTo(cx - r * 0.2, cy - r * 0.44);
+    context.stroke();
+    context.moveTo(cx, cy);
+    context.lineTo(cx + r * 0.55, cy - r * 0.08);
+    context.stroke();
+    setSourceRgb(context, appearance.accent);
+    context.arc(cx, cy, variant === 1 ? 8 : 5, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+}
+
+function renderPhotoPreview(context, width, height, {appearance, variant}) {
+    renderWidgetShell(context, width, height, appearance, variant ? 999 : 18);
+    const frameInset = 24;
+    const frameWidth = width - frameInset * 2;
+    const frameHeight = height - 38;
+    drawRoundedRectangle(context, frameInset, 19, frameWidth, frameHeight, variant ? 999 : 16);
+    setSourceRgb(context, appearance.contentBackground);
+    context.fill();
+    setSourceRgb(context, appearance.accent);
+    context.arc(width * 0.39, height * 0.42, 19, 0, Math.PI * 2);
+    context.fill();
+    setSourceRgb(context, appearance.muted);
+    context.moveTo(width * 0.23, height * 0.77);
+    context.lineTo(width * 0.46, height * 0.55);
+    context.lineTo(width * 0.60, height * 0.69);
+    context.lineTo(width * 0.76, height * 0.47);
+    context.lineTo(width * 0.88, height * 0.77);
+    context.closePath();
+    context.fill();
+    context.restore();
+}
+
+function renderWeatherPreview(context, width, height, {appearance, previewData}) {
+    renderWidgetShell(context, width, height, appearance);
+    drawText(context, previewData.symbol, 30, 66, 43, appearance.accent, 'NothingNType');
+    drawText(context, previewData.temperature, width - 112, 68, 46, appearance.text, 'NothingNDot');
+    drawText(context, previewData.location, 32, 101, 15, appearance.muted, 'NothingNType');
+    drawText(context, previewData.condition, 32, 125, 20, appearance.text, 'NothingNType');
+    drawText(context, 'H 31°  L 24°', 32, 142, 11, appearance.muted, 'NothingNType', 'normal');
+    context.restore();
+}
+
+function renderMediaPreview(context, width, height, {appearance, previewData}) {
+    renderWidgetShell(context, width, height, appearance);
+    const artSize = 72;
+    const artX = 27;
+    const artY = 33;
+    drawRoundedRectangle(context, artX, artY, artSize, artSize, 16);
+    setSourceRgb(context, appearance.contentBackground);
+    context.fill();
+    drawCenteredText(context, '♪', artX + artSize / 2, artY + 47, 30, appearance.muted, 'Sans', 'normal');
+    drawText(context, previewData.player, 112, 46, 11, appearance.accent, 'NothingNType');
+    drawText(context, previewData.title, 112, 70, 18, appearance.text, 'NothingNType');
+    drawText(context, previewData.artist, 112, 93, 12, appearance.muted, 'NothingNType', 'normal');
+    drawRoundedRectangle(context, 112, 105, 76, 5, 3);
+    setSourceRgb(context, appearance.muted);
+    context.fill();
+    drawRoundedRectangle(context, 112, 105, Math.round(76 * previewData.progress), 5, 3);
+    setSourceRgb(context, appearance.text);
+    context.fill();
+    for (const [index, radius] of [10, 13, 10].entries()) {
+        const x = 125 + index * 30;
+        const y = 128;
+        setSourceRgb(context, index === 1 ? appearance.accent : appearance.contentBackground);
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fill();
+    }
+    context.restore();
+}
+
+function renderSystemPreview(context, width, height, {appearance, previewData, variant}) {
+    renderWidgetShell(context, width, height, appearance);
+    drawText(context, 'SYSTEM', 30, 43, 15, appearance.accent, 'NothingNType');
+    drawText(context, variant === 1 ? 'CHARTS' : 'LIVE', width - 82, 43, 11, appearance.muted, 'NothingNType');
+    if (variant === 1) {
+        const chartRadius = Math.max(11, Math.min(15, (Math.min(width, height) - 76) / 4));
+        for (const [index, chart] of previewData.charts.entries()) {
+            const x = width * (index % 2 === 0 ? 0.33 : 0.68);
+            const y = 76 + Math.floor(index / 2) * 44;
+            context.setLineWidth(Math.max(4, chartRadius * 0.32));
+            setSourceRgb(context, appearance.muted);
+            context.arc(x, y, chartRadius, 0, Math.PI * 2);
+            context.stroke();
+            setSourceRgb(context, appearance.accent);
+            context.arc(x, y, chartRadius, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * chart.ratio);
+            context.stroke();
+            drawCenteredText(context, chart.value, x, y + 4, 10, appearance.text, 'NothingNType');
+            drawCenteredText(context, chart.label, x, y + chartRadius + 16, 9, appearance.muted, 'NothingNType');
+        }
+    } else {
+        for (const [index, row] of previewData.rows.entries()) {
+            const y = 72 + index * 23;
+            const [label, value] = row.split(' ');
+            drawText(context, label, 32, y, 12, appearance.muted, 'NothingNType');
+            drawText(context, value, width - 86, y, 12, appearance.text, 'NothingNType');
+            drawRoundedRectangle(context, 32, y + 8, width - 64, 4, 2);
+            setSourceRgb(context, appearance.muted);
+            context.fill();
+            drawRoundedRectangle(context, 32, y + 8, (width - 64) * (index === 0 ? 0.42 : index === 1 ? 0.61 : 0.38), 4, 2);
+            setSourceRgb(context, index === 2 ? appearance.text : appearance.accent);
+            context.fill();
+        }
+    }
+    context.restore();
+}
+
+function renderWidgetPreview(context, width, height, widget, settings, variantOverride = null) {
+    const appearance = getPreviewAppearance(widget, settings);
+    const variant = getPreviewVariant(widget, settings, variantOverride);
+    const config = {
+        ...widget.defaultConfig,
+        ...widget.previewConfig,
+        mode: 'preview',
+    };
+
+    widget.Component(context, width, height, {
+        appearance,
+        config,
+        previewData: widget.previewData,
+        variant,
+    });
+}
+
+function createWidgetPreviewFrame(widget, settings, variantOverride = null) {
+    const [contentWidth, contentHeight] = widget.previewSize;
+    const preview = new Gtk.DrawingArea({
+        content_width: contentWidth,
+        content_height: contentHeight,
+        hexpand: true,
+    });
+    preview.set_draw_func((_area, context, width, height) => {
+        context.rectangle(0, 0, width, height);
+        context.clip();
+        renderWidgetPreview(context, width, height, widget, settings, variantOverride);
+    });
+    return preview;
 }
 
 function createIconTextButton(iconName, label, tooltipText) {
@@ -497,6 +765,42 @@ function createColorButton(color, tooltipText) {
     });
 }
 
+function createCurrentColorButton(settings, widget, preview) {
+    const swatch = new Gtk.DrawingArea({
+        content_width: 24,
+        content_height: 24,
+    });
+    swatch.set_draw_func((_area, context, width, height) => {
+        const radius = Math.min(width, height) / 2 - 2;
+        const color = getAccentColor(settings, widget);
+        context.arc(width / 2, height / 2, radius, 0, Math.PI * 2);
+        setSourceRgb(context, color);
+        context.fill();
+        context.arc(width / 2, height / 2, radius, 0, Math.PI * 2);
+        context.setSourceRGBA(1, 1, 1, 0.76);
+        context.setLineWidth(1.5);
+        context.stroke();
+    });
+
+    const button = new Gtk.Button({
+        child: swatch,
+        tooltip_text: 'Show appearance options',
+        valign: Gtk.Align.CENTER,
+        width_request: 36,
+        height_request: 36,
+    });
+    button.add_css_class('circular');
+
+    for (const key of [widget.accentKey, widget.accentColorKey, widget.customColorKey, widget.themeKey].filter(Boolean)) {
+        settings.connect(`changed::${key}`, () => {
+            swatch.queue_draw();
+            preview.queue_draw();
+        });
+    }
+
+    return button;
+}
+
 function createButtonFlow() {
     return new Gtk.FlowBox({
         selection_mode: Gtk.SelectionMode.NONE,
@@ -536,7 +840,10 @@ function createAccentColorPicker(settings, colorKey, customColorKey, onChanged) 
 
     let syncing = false;
     const applyHex = hex => {
-        const normalized = parseColorInput(hex, settings.get_string(customColorKey));
+        const normalized = tryParseColorInput(hex);
+        if (!normalized)
+            return;
+
         syncing = true;
         settings.set_boolean(colorKey.accentKey, false);
         settings.set_int(colorKey.accentColorKey, ACCENT_CUSTOM);
@@ -555,6 +862,19 @@ function createAccentColorPicker(settings, colorKey, customColorKey, onChanged) 
         if (!syncing)
             applyHex(row.text);
     });
+
+    for (const key of [colorKey.accentKey, colorKey.accentColorKey, customColorKey].filter(Boolean)) {
+        settings.connect(`changed::${key}`, () => {
+            if (syncing || settings.get_int(colorKey.accentColorKey) !== ACCENT_CUSTOM)
+                return;
+
+            const normalized = normalizeHexColor(settings.get_string(customColorKey));
+            syncing = true;
+            button.rgba = hexToRgba(normalized);
+            entry.text = normalized;
+            syncing = false;
+        });
+    }
 
     return panel;
 }
@@ -604,6 +924,14 @@ function setAllTheme(settings, value) {
     settings.set_int('theme-mode', value);
     for (const widget of WIDGETS)
         settings.set_int(widget.themeKey, value);
+}
+
+function setAllTranslucence(settings, value) {
+    const opacity = 100 - value;
+    for (const widget of WIDGETS) {
+        if (widget.supportsTranslucence !== false)
+            settings.set_int(widget.opacityKey, opacity);
+    }
 }
 
 function setAllAccent(settings, value) {
@@ -673,30 +1001,21 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         });
 
         const toolbar = createButtonFlow();
-        const darkButton = createIconTextButton('weather-clear-night-symbolic', 'Dark', 'Use dark styling for every widget');
-        const lightButton = createIconTextButton('weather-clear-symbolic', 'Light', 'Use light styling for every widget');
-        const systemButton = createIconTextButton('preferences-desktop-theme-symbolic', 'System', 'Follow GNOME color scheme for every widget');
         const addAllButton = createIconTextButton('list-add-symbolic', 'Add All', 'Show every widget');
         const removeAllButton = createIconTextButton('user-trash-symbolic', 'Remove All', 'Hide every widget');
-        toolbar.append(darkButton);
-        toolbar.append(lightButton);
-        toolbar.append(systemButton);
         toolbar.append(addAllButton);
         toolbar.append(removeAllButton);
 
-        darkButton.connect('clicked', () => setAllTheme(settings, THEME_DARK));
-        lightButton.connect('clicked', () => setAllTheme(settings, THEME_LIGHT));
-        systemButton.connect('clicked', () => setAllTheme(settings, THEME_FOLLOW_SYSTEM));
         addAllButton.connect('clicked', () => setAllEnabled(settings, true));
         removeAllButton.connect('clicked', () => setAllEnabled(settings, false));
         universalGroup.add(toolbar);
 
-        const globalAccentRow = new Adw.ExpanderRow({
-            title: 'Global accent color',
-            subtitle: 'Apply system, palette, or custom color to every widget.',
+        const globalAppearanceRow = new Adw.ExpanderRow({
+            title: 'Global Appearance',
+            subtitle: 'Apply theme, translucence, and accent color to every widget.',
         });
-        globalAccentRow.add_row(this._createGlobalAccentControls(settings));
-        universalGroup.add(globalAccentRow);
+        globalAppearanceRow.add_row(this._createGlobalAppearanceControls(settings));
+        universalGroup.add(globalAppearanceRow);
         page.add(universalGroup);
 
         const widgetGroup = new Adw.PreferencesGroup({
@@ -734,12 +1053,7 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         });
         card.add_css_class('card');
 
-        const preview = new Gtk.DrawingArea({
-            content_width: 216,
-            content_height: 150,
-            hexpand: true,
-        });
-        preview.set_draw_func((_area, context, width, height) => drawPreview(context, width, height, widget, settings));
+        const preview = createWidgetPreviewFrame(widget, settings);
         card.append(preview);
 
         const titleRow = new Gtk.Box({
@@ -774,12 +1088,24 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
             icon_name: 'preferences-system-symbolic',
             tooltip_text: 'Show widget settings',
         });
+        const appearanceButton = createCurrentColorButton(settings, widget, preview);
         const settingsRevealer = new Gtk.Revealer({
+            transition_type: Gtk.RevealerTransitionType.SLIDE_DOWN,
+            reveal_child: false,
+        });
+        const appearanceRevealer = new Gtk.Revealer({
             transition_type: Gtk.RevealerTransitionType.SLIDE_DOWN,
             reveal_child: false,
         });
         settingsButton.connect('clicked', () => {
             settingsRevealer.reveal_child = !settingsRevealer.reveal_child;
+            if (settingsRevealer.reveal_child)
+                appearanceRevealer.reveal_child = false;
+        });
+        appearanceButton.connect('clicked', () => {
+            appearanceRevealer.reveal_child = !appearanceRevealer.reveal_child;
+            if (appearanceRevealer.reveal_child)
+                settingsRevealer.reveal_child = false;
         });
 
         const syncAddRemove = () => {
@@ -797,13 +1123,16 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         });
 
         controls.append(addRemoveButton);
+        controls.append(appearanceButton);
         controls.append(settingsButton);
         card.append(controls);
 
         settingsRevealer.set_child(this._createInlineSettings(widget, settings, window, weatherSession, preview));
+        appearanceRevealer.set_child(this._createAppearanceSettings(widget, settings, preview));
+        card.append(appearanceRevealer);
         card.append(settingsRevealer);
 
-        const redrawKeys = [widget.enabledKey, widget.themeKey, widget.accentKey, widget.accentColorKey, widget.customColorKey, widget.variantKey].filter(Boolean);
+        const redrawKeys = [widget.enabledKey, widget.themeKey, widget.accentKey, widget.accentColorKey, widget.customColorKey, widget.opacityKey, widget.variantKey].filter(Boolean);
         for (const key of redrawKeys) {
             settings.connect(`changed::${key}`, () => {
                 syncAddRemove();
@@ -832,16 +1161,37 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
             panel.append(styleFlow);
         }
 
-        panel.append(createPanelLabel('Appearance'));
-        const themeRow = createDropDownRow('Theme', Gtk.StringList.new(THEME_LABELS), settings.get_int(widget.themeKey));
-        themeRow.dropdown.connect('notify::selected', dropdown => settings.set_int(widget.themeKey, dropdown.selected));
-        panel.append(themeRow);
-        panel.append(this._createAccentPalette(widget, settings, preview));
-
         const widgetSpecific = this._createWidgetSpecificSettings(widget, settings, window, weatherSession);
         if (widgetSpecific)
             panel.append(widgetSpecific);
+        else if (!widget.variants)
+            panel.append(createPanelLabel('No extra settings'));
 
+        return panel;
+    }
+
+    _createAppearanceSettings(widget, settings, preview) {
+        const panel = createInlinePanel();
+
+        panel.append(createPanelLabel('Appearance'));
+        const themeRow = createDropDownRow('Theme', Gtk.StringList.new(THEME_LABELS), settings.get_int(widget.themeKey));
+        themeRow.dropdown.connect('notify::selected', dropdown => {
+            settings.set_int(widget.themeKey, dropdown.selected);
+            preview.queue_draw();
+        });
+        panel.append(themeRow);
+
+        if (widget.supportsTranslucence !== false) {
+            const opacityRow = createSpinRow('Translucence', 100 - settings.get_int(widget.opacityKey), 0, 80);
+            opacityRow.subtitle = '0 is solid, 80 is very transparent.';
+            opacityRow.connect('notify::value', row => {
+                settings.set_int(widget.opacityKey, 100 - row.value);
+                preview.queue_draw();
+            });
+            panel.append(opacityRow);
+        }
+
+        panel.append(this._createAccentPalette(widget, settings, preview));
         return panel;
     }
 
@@ -851,11 +1201,14 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
             spacing: 6,
             width_request: 168,
         });
-        const drawing = new Gtk.DrawingArea({
-            content_width: 156,
-            content_height: 88,
-        });
-        drawing.set_draw_func((_area, context, width, height) => drawPreview(context, width, height, widget, settings, variant.value));
+        const drawing = createWidgetPreviewFrame(
+            {
+                ...widget,
+                previewSize: [156, 88],
+            },
+            settings,
+            variant.value
+        );
         const label = new Gtk.Label({label: variant.label});
         box.append(drawing);
         box.append(label);
@@ -873,11 +1226,22 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         return button;
     }
 
-    _createGlobalAccentControls(settings) {
+    _createGlobalAppearanceControls(settings) {
         const box = createInlinePanel();
         box.margin_top = 8;
         box.margin_start = 0;
         box.margin_end = 0;
+
+        const themeRow = createDropDownRow('Theme', Gtk.StringList.new(THEME_LABELS), settings.get_int('theme-mode'));
+        themeRow.dropdown.connect('notify::selected', dropdown => setAllTheme(settings, dropdown.selected));
+        box.append(themeRow);
+
+        const translucenceRow = createSpinRow('Translucence', 100 - settings.get_int('date-opacity'), 0, 80);
+        translucenceRow.subtitle = '0 is solid, 80 is very transparent.';
+        translucenceRow.connect('notify::value', row => setAllTranslucence(settings, row.value));
+        box.append(translucenceRow);
+
+        box.append(createPanelLabel('Accent Color'));
 
         const systemButton = new Gtk.Button({
             icon_name: 'color-select-symbolic',
@@ -1067,8 +1431,137 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         const photoBorderSizeRow = createSpinRow('Frame size', settings.get_int('photo-border-size'), 0, 48);
         settings.bind('photo-border-size', photoBorderSizeRow, 'value', Gio.SettingsBindFlags.DEFAULT);
         panel.append(photoBorderSizeRow);
-        panel.append(this._createSwitchRow(settings, 'photo-pill-shape-enabled', 'Pill shape'));
+        const fillModeRow = createDropDownRow(
+            'Image fill',
+            Gtk.StringList.new(['Crop', 'Fit', 'Stretch']),
+            settings.get_int('photo-image-fill-mode')
+        );
+        fillModeRow.dropdown.connect('notify::selected', dropdown => settings.set_int('photo-image-fill-mode', dropdown.selected));
+        panel.append(fillModeRow);
         panel.append(this._createSwitchRow(settings, 'photo-grayscale-enabled', 'Grayscale'));
+    }
+
+    _createWeatherLocationSearch(settings, weatherSession, weatherSelectedRow, selectedWeatherName) {
+        const box = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            spacing: 8,
+            margin_top: 8,
+            margin_bottom: 8,
+            margin_start: 12,
+            margin_end: 12,
+        });
+
+        const searchLabel = new Gtk.Label({
+            label: 'Search location',
+            xalign: 0,
+        });
+        searchLabel.add_css_class('dim-label');
+
+        const searchEntry = new Gtk.SearchEntry({
+            text: selectedWeatherName,
+            placeholder_text: 'City or region',
+            hexpand: true,
+        });
+
+        const statusLabel = new Gtk.Label({
+            label: 'Results come directly from Open-Meteo geocoding.',
+            xalign: 0,
+        });
+        statusLabel.add_css_class('dim-label');
+
+        const resultsList = new Gtk.ListBox({
+            selection_mode: Gtk.SelectionMode.NONE,
+        });
+        resultsList.add_css_class('boxed-list');
+        const resultsRevealer = new Gtk.Revealer({
+            transition_type: Gtk.RevealerTransitionType.SLIDE_DOWN,
+            child: resultsList,
+            reveal_child: false,
+        });
+
+        box.append(searchLabel);
+        box.append(searchEntry);
+        box.append(resultsRevealer);
+        box.append(statusLabel);
+
+        let weatherSearchTimeoutId = 0;
+        let weatherSearchSerial = 0;
+        let applyingSelection = false;
+
+        const clearResults = () => {
+            clearListBox(resultsList);
+            resultsRevealer.reveal_child = false;
+        };
+
+        const setSelectedWeather = selected => {
+            const label = formatWeatherLocation(selected);
+            applyingSelection = true;
+            searchEntry.text = label;
+            applyingSelection = false;
+            settings.set_string('weather-location-name', label);
+            settings.set_double('weather-latitude', selected.latitude);
+            settings.set_double('weather-longitude', selected.longitude);
+            settings.set_string('weather-time-zone', selected.timezone ?? '');
+            settings.set_string('weather-location', '');
+            weatherSelectedRow.subtitle = label;
+            statusLabel.label = 'Location selected.';
+            clearResults();
+        };
+
+        const updateWeatherResults = (items, status) => {
+            clearListBox(resultsList);
+
+            if (items.length === 0) {
+                resultsRevealer.reveal_child = false;
+                statusLabel.label = status ?? 'No matches found';
+                return;
+            }
+
+            for (const item of items)
+                resultsList.append(createWeatherResultRow(item));
+
+            statusLabel.label = 'Select a matching location.';
+            resultsRevealer.reveal_child = true;
+        };
+
+        searchEntry.connect('search-changed', entry => {
+            if (applyingSelection)
+                return;
+
+            const query = entry.text.trim();
+            const serial = ++weatherSearchSerial;
+
+            if (weatherSearchTimeoutId) {
+                GLib.Source.remove(weatherSearchTimeoutId);
+                weatherSearchTimeoutId = 0;
+            }
+
+            if (query.length < 2) {
+                clearResults();
+                statusLabel.label = 'Type at least 2 characters.';
+                return;
+            }
+
+            clearResults();
+            statusLabel.label = 'Searching...';
+            weatherSearchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 350, () => {
+                weatherSearchTimeoutId = 0;
+                fetchWeatherLocations(weatherSession, query, (results, error) => {
+                    if (serial !== weatherSearchSerial)
+                        return;
+
+                    updateWeatherResults(results ?? [], error);
+                });
+                return GLib.SOURCE_REMOVE;
+            });
+        });
+
+        resultsList.connect('row-activated', (_list, row) => {
+            if (row.weatherResult)
+                setSelectedWeather(row.weatherResult);
+        });
+
+        return box;
     }
 
     _appendWeatherRows(panel, settings, weatherSession) {
@@ -1079,77 +1572,7 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         });
         panel.append(weatherSelectedRow);
 
-        const weatherSearchRow = new Adw.EntryRow({
-            title: 'Search location',
-            text: selectedWeatherName,
-        });
-        panel.append(weatherSearchRow);
-
-        const weatherResults = [];
-        const weatherResultsModel = Gtk.StringList.new(['Type a location to search']);
-        const weatherResultsRow = createDropDownRow('Open-Meteo matches', weatherResultsModel, 0);
-        panel.append(weatherResultsRow);
-
-        let weatherSearchTimeoutId = 0;
-        let weatherSearchSerial = 0;
-        const updateWeatherResults = (items, status) => {
-            weatherResults.length = 0;
-            weatherResultsModel.splice(0, weatherResultsModel.get_n_items(), []);
-
-            if (items.length === 0) {
-                weatherResultsModel.append(status ?? 'No matches found');
-                weatherResultsRow.dropdown.selected = 0;
-                return;
-            }
-
-            weatherResultsModel.append('Choose a match...');
-            for (const item of items) {
-                weatherResults.push(item);
-                weatherResultsModel.append(formatWeatherLocation(item));
-            }
-            weatherResultsRow.dropdown.selected = 0;
-        };
-
-        weatherSearchRow.connect('changed', row => {
-            const query = row.text.trim();
-            const serial = ++weatherSearchSerial;
-
-            if (weatherSearchTimeoutId) {
-                GLib.Source.remove(weatherSearchTimeoutId);
-                weatherSearchTimeoutId = 0;
-            }
-
-            if (query.length < 2) {
-                updateWeatherResults([], 'Type at least 2 characters');
-                return;
-            }
-
-            updateWeatherResults([], 'Searching...');
-            weatherSearchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 450, () => {
-                weatherSearchTimeoutId = 0;
-                fetchWeatherLocations(weatherSession, query, (results, error) => {
-                    if (serial !== weatherSearchSerial)
-                        return;
-
-                    updateWeatherResults(results ?? [], error);
-                });
-                return GLib.SOURCE_REMOVE;
-            });
-        });
-
-        weatherResultsRow.dropdown.connect('notify::selected', dropdown => {
-            const selected = weatherResults[dropdown.selected - 1];
-            if (!selected)
-                return;
-
-            const label = formatWeatherLocation(selected);
-            settings.set_string('weather-location-name', label);
-            settings.set_double('weather-latitude', selected.latitude);
-            settings.set_double('weather-longitude', selected.longitude);
-            settings.set_string('weather-time-zone', selected.timezone ?? '');
-            settings.set_string('weather-location', '');
-            weatherSelectedRow.subtitle = label;
-        });
+        panel.append(this._createWeatherLocationSearch(settings, weatherSession, weatherSelectedRow, selectedWeatherName));
 
         const weatherUnitRow = createDropDownRow(
             'Temperature unit',
@@ -1160,378 +1583,4 @@ export default class GNOMEWidgetsPreferences extends ExtensionPreferences {
         panel.append(weatherUnitRow);
     }
 
-    _buildSettingsPage(page, settings, weatherSession, window) {
-        page.add(this._buildUniversalAppearanceGroup(settings));
-        page.add(this._buildPerWidgetAppearanceGroup(settings));
-        page.add(this._buildClockGroup(settings));
-        page.add(this._buildAnalogGroup(settings));
-        page.add(this._buildPhotoGroup(settings, window));
-        page.add(this._buildWeatherGroup(settings, weatherSession));
-        page.add(this._buildMediaGroup());
-        page.add(this._buildSystemGroup(settings));
-    }
-
-    _buildUniversalAppearanceGroup(settings) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Universal Appearance',
-            description: 'These controls update every widget at once.',
-        });
-
-        const themeRow = new Adw.ComboRow({
-            title: 'Theme',
-            subtitle: 'Dark, light, or follow your GNOME color scheme.',
-            model: Gtk.StringList.new(THEME_LABELS),
-            selected: settings.get_int('theme-mode'),
-        });
-        themeRow.connect('notify::selected', row => setAllTheme(settings, row.selected));
-        group.add(themeRow);
-
-        const accentRow = new Adw.SwitchRow({
-            title: 'Use system accent color',
-            subtitle: 'Swap Nothing red highlights for your GNOME accent color on every widget.',
-        });
-        accentRow.active = settings.get_boolean('use-system-accent');
-        accentRow.connect('notify::active', row => setAllAccent(settings, row.active));
-        group.add(accentRow);
-
-        return group;
-    }
-
-    _buildPerWidgetAppearanceGroup(settings) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Per Widget Appearance',
-            description: 'Override theme and accent behavior independently after using universal controls.',
-        });
-
-        for (const widget of WIDGETS) {
-            const row = new Adw.ExpanderRow({
-                title: widget.title,
-                subtitle: widget.description,
-            });
-            const themeRow = new Adw.ComboRow({
-                title: 'Theme',
-                model: Gtk.StringList.new(THEME_LABELS),
-                selected: settings.get_int(widget.themeKey),
-            });
-            themeRow.connect('notify::selected', combo => settings.set_int(widget.themeKey, combo.selected));
-            row.add_row(themeRow);
-
-            const accentRow = new Adw.SwitchRow({
-                title: 'Use system accent color',
-                subtitle: 'Off keeps the Nothing red highlight.',
-            });
-            settings.bind(widget.accentKey, accentRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-            row.add_row(accentRow);
-            group.add(row);
-        }
-
-        return group;
-    }
-
-    _buildClockGroup(settings) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Digital Clock',
-            description: 'Live clock settings for the Nothing-style desktop clock.',
-        });
-
-        const clockVariantRow = new Adw.ComboRow({
-            title: 'Clock variant',
-            subtitle: 'Choose the standard digital clock or the world clock layout.',
-            model: Gtk.StringList.new(['Digital Clock', 'World Clock']),
-            selected: settings.get_int('clock-widget-variant'),
-        });
-        clockVariantRow.connect('notify::selected', row => settings.set_int('clock-widget-variant', row.selected));
-        group.add(clockVariantRow);
-
-        const clockFormatRow = new Adw.SwitchRow({
-            title: 'Use 24-hour time',
-            subtitle: 'Turn off for 12-hour time.',
-        });
-        settings.bind('clock-use-24-hour', clockFormatRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(clockFormatRow);
-
-        const timeZones = loadSystemTimeZones();
-        const selectedTimeZone = settings.get_string('world-clock-time-zone');
-        const selectedTimeZoneIndex = Math.max(0, timeZones.findIndex(zone => zone.timeZone === selectedTimeZone));
-        const worldClockTimezoneRow = new Adw.ComboRow({
-            title: 'World clock time zone',
-            subtitle: 'Uses the system IANA timezone database, including daylight saving time rules.',
-            model: Gtk.StringList.new(timeZones.map(zone => zone.label)),
-            selected: selectedTimeZoneIndex,
-        });
-        worldClockTimezoneRow.connect('notify::selected', row => {
-            const selectedZone = timeZones[row.selected];
-            if (!selectedZone)
-                return;
-
-            settings.set_string('world-clock-time-zone', selectedZone.timeZone);
-            settings.set_string('world-clock-city-name', selectedZone.city);
-        });
-        group.add(worldClockTimezoneRow);
-
-        const worldClockCityRow = new Adw.EntryRow({
-            title: 'World clock display city',
-            text: settings.get_string('world-clock-city-name'),
-        });
-        worldClockCityRow.connect('changed', row => settings.set_string('world-clock-city-name', row.text));
-        group.add(worldClockCityRow);
-
-        const largeClockDateRow = new Adw.SwitchRow({
-            title: 'Show date on large clock',
-            subtitle: 'Display the day and date above the large digital clock.',
-        });
-        settings.bind('large-clock-show-date', largeClockDateRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(largeClockDateRow);
-
-        return group;
-    }
-
-    _buildAnalogGroup(settings) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Analog Clock',
-            description: 'Choose between the Swiss railway and minimalist analog styles.',
-        });
-
-        const analogStyleRow = new Adw.ComboRow({
-            title: 'Analog style',
-            model: Gtk.StringList.new(['Swiss Railway', 'Minimalist']),
-            selected: settings.get_int('analog-clock-style'),
-        });
-        analogStyleRow.connect('notify::selected', row => settings.set_int('analog-clock-style', row.selected));
-        group.add(analogStyleRow);
-
-        return group;
-    }
-
-    _buildPhotoGroup(settings, window) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Photo Frame',
-            description: 'Set the image and frame behavior for the desktop photo widget.',
-        });
-
-        const photoPathRow = new Adw.EntryRow({
-            title: 'Image path',
-            text: settings.get_string('photo-image-path'),
-        });
-        photoPathRow.connect('changed', row => settings.set_string('photo-image-path', row.text));
-
-        const photoBrowseButton = new Gtk.Button({
-            icon_name: 'folder-open-symbolic',
-            tooltip_text: 'Browse for image',
-            valign: Gtk.Align.CENTER,
-        });
-        photoPathRow.add_suffix(photoBrowseButton);
-        photoBrowseButton.connect('clicked', () => {
-            const dialog = new Gtk.FileDialog({
-                title: 'Choose Photo Frame Image',
-                modal: true,
-            });
-            const filters = new Gio.ListStore({item_type: Gtk.FileFilter});
-            filters.append(createImageFileFilter());
-            dialog.set_filters(filters);
-
-            const currentFile = getPhotoDialogFile(photoPathRow.text.trim(), this.path);
-            if (currentFile)
-                dialog.set_initial_file(currentFile);
-
-            dialog.open(window, null, (_dialog, result) => {
-                try {
-                    const file = dialog.open_finish(result);
-                    const selectedPath = file.get_path() ?? file.get_uri();
-                    photoPathRow.text = selectedPath;
-                    settings.set_string('photo-image-path', selectedPath);
-                } catch (error) {
-                    if (!error.matches?.(Gtk.DialogError, Gtk.DialogError.DISMISSED))
-                        log(`GNOME Widgets: failed to choose photo image: ${error}`);
-                }
-            });
-        });
-        group.add(photoPathRow);
-
-        const photoFillRow = new Adw.ComboRow({
-            title: 'Image fill',
-            model: Gtk.StringList.new(['Crop', 'Fit', 'Stretch']),
-            selected: settings.get_int('photo-image-fill-mode'),
-        });
-        photoFillRow.connect('notify::selected', row => settings.set_int('photo-image-fill-mode', row.selected));
-        group.add(photoFillRow);
-
-        const photoBorderRow = new Adw.SwitchRow({
-            title: 'Show frame border',
-            subtitle: 'Reveal the Nothing-style background around the image.',
-        });
-        settings.bind('photo-border-enabled', photoBorderRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(photoBorderRow);
-
-        const photoBorderSizeRow = new Adw.SpinRow({
-            title: 'Frame size',
-            adjustment: new Gtk.Adjustment({
-                lower: 0,
-                upper: 48,
-                step_increment: 1,
-                page_increment: 4,
-                value: settings.get_int('photo-border-size'),
-            }),
-        });
-        settings.bind('photo-border-size', photoBorderSizeRow, 'value', Gio.SettingsBindFlags.DEFAULT);
-        group.add(photoBorderSizeRow);
-
-        const photoPillRow = new Adw.SwitchRow({
-            title: 'Pill shape',
-            subtitle: 'Use circular or pill-shaped rounding based on widget dimensions.',
-        });
-        settings.bind('photo-pill-shape-enabled', photoPillRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(photoPillRow);
-
-        const photoGrayscaleRow = new Adw.SwitchRow({
-            title: 'Grayscale',
-            subtitle: 'Desaturate the displayed image.',
-        });
-        settings.bind('photo-grayscale-enabled', photoGrayscaleRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(photoGrayscaleRow);
-
-        return group;
-    }
-
-    _buildWeatherGroup(settings, weatherSession) {
-        const group = new Adw.PreferencesGroup({
-            title: 'Weather',
-            description: 'Current weather from a selected Open-Meteo location.',
-        });
-
-        const selectedWeatherName = settings.get_string('weather-location-name');
-        const weatherSelectedRow = new Adw.ActionRow({
-            title: 'Selected location',
-            subtitle: selectedWeatherName || 'No location selected',
-        });
-        group.add(weatherSelectedRow);
-
-        const weatherSearchRow = new Adw.EntryRow({
-            title: 'Search location',
-            text: selectedWeatherName,
-        });
-        group.add(weatherSearchRow);
-
-        const weatherResults = [];
-        const weatherResultsModel = Gtk.StringList.new(['Type a location to search']);
-        const weatherResultsRow = new Adw.ComboRow({
-            title: 'Open-Meteo matches',
-            subtitle: 'Choose a result to save its coordinates and time zone.',
-            model: weatherResultsModel,
-            selected: 0,
-        });
-        group.add(weatherResultsRow);
-
-        const weatherSearchStatusRow = new Adw.ActionRow({
-            title: 'Location source',
-            subtitle: 'Results come directly from Open-Meteo geocoding.',
-        });
-        group.add(weatherSearchStatusRow);
-
-        let weatherSearchTimeoutId = 0;
-        let weatherSearchSerial = 0;
-        const updateWeatherResults = (items, status) => {
-            weatherResults.length = 0;
-            weatherResultsModel.splice(0, weatherResultsModel.get_n_items(), []);
-
-            if (items.length === 0) {
-                weatherResultsModel.append(status ?? 'No matches found');
-                weatherResultsRow.selected = 0;
-                return;
-            }
-
-            weatherResultsModel.append('Choose a match...');
-            for (const item of items) {
-                weatherResults.push(item);
-                weatherResultsModel.append(formatWeatherLocation(item));
-            }
-            weatherResultsRow.selected = 0;
-        };
-
-        weatherSearchRow.connect('changed', row => {
-            const query = row.text.trim();
-            const serial = ++weatherSearchSerial;
-
-            if (weatherSearchTimeoutId) {
-                GLib.Source.remove(weatherSearchTimeoutId);
-                weatherSearchTimeoutId = 0;
-            }
-
-            if (query.length < 2) {
-                updateWeatherResults([], 'Type at least 2 characters');
-                return;
-            }
-
-            updateWeatherResults([], 'Searching...');
-            weatherSearchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 450, () => {
-                weatherSearchTimeoutId = 0;
-                fetchWeatherLocations(weatherSession, query, (results, error) => {
-                    if (serial !== weatherSearchSerial)
-                        return;
-
-                    updateWeatherResults(results ?? [], error);
-                });
-                return GLib.SOURCE_REMOVE;
-            });
-        });
-
-        weatherResultsRow.connect('notify::selected', row => {
-            const selected = weatherResults[row.selected - 1];
-            if (!selected)
-                return;
-
-            const label = formatWeatherLocation(selected);
-            settings.set_string('weather-location-name', label);
-            settings.set_double('weather-latitude', selected.latitude);
-            settings.set_double('weather-longitude', selected.longitude);
-            settings.set_string('weather-time-zone', selected.timezone ?? '');
-            settings.set_string('weather-location', '');
-            weatherSelectedRow.subtitle = label;
-        });
-
-        const weatherUnitRow = new Adw.ComboRow({
-            title: 'Temperature unit',
-            model: Gtk.StringList.new(['Celsius', 'Fahrenheit']),
-            selected: settings.get_int('weather-temperature-unit'),
-        });
-        weatherUnitRow.connect('notify::selected', row => settings.set_int('weather-temperature-unit', row.selected));
-        group.add(weatherUnitRow);
-
-        return group;
-    }
-
-    _buildMediaGroup() {
-        const group = new Adw.PreferencesGroup({
-            title: 'Media Player',
-            description: 'Uses MPRIS metadata and controls from supported players.',
-        });
-        group.add(new Adw.ActionRow({
-            title: 'Player source',
-            subtitle: 'Spotify, VLC, browsers, and other MPRIS players appear automatically when active.',
-        }));
-        return group;
-    }
-
-    _buildSystemGroup(settings) {
-        const group = new Adw.PreferencesGroup({
-            title: 'System Monitor',
-            description: 'Local CPU, RAM, network, and disk usage.',
-        });
-
-        const systemStyleRow = new Adw.ComboRow({
-            title: 'System monitor style',
-            subtitle: 'Choose compact numbers or hollow pie charts.',
-            model: Gtk.StringList.new(['Number List', 'Hollow Charts']),
-            selected: settings.get_int('system-monitor-style'),
-        });
-        systemStyleRow.connect('notify::selected', row => settings.set_int('system-monitor-style', row.selected));
-        group.add(systemStyleRow);
-
-        group.add(new Adw.ActionRow({
-            title: 'Metrics source',
-            subtitle: 'Reads /proc and root filesystem stats locally. Battery is intentionally skipped.',
-        }));
-
-        return group;
-    }
 }

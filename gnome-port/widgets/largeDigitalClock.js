@@ -17,6 +17,7 @@ const LARGE_CLOCK_WIDGET_CONFIG = {
     accentKey: 'large-clock-use-system-accent',
     accentColorKey: 'large-clock-accent-color',
     customColorKey: 'large-clock-custom-accent-color',
+    opacityKey: 'large-clock-opacity',
     xKey: 'large-clock-x',
     yKey: 'large-clock-y',
     widthKey: 'large-clock-width',
@@ -30,6 +31,7 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
 
         this._dateLabel = null;
         this._timeLabel = null;
+        this._card = null;
         this._clockTimeoutId = 0;
     }
 
@@ -42,12 +44,8 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
             return GLib.SOURCE_CONTINUE;
         });
 
-        this._settingsSignalIds.push(
-            this._settings.connect('changed::clock-use-24-hour', () => this._updateDateTime())
-        );
-        this._settingsSignalIds.push(
-            this._settings.connect('changed::large-clock-show-date', () => this._syncDateVisibility())
-        );
+        this._connectSetting('clock-use-24-hour', () => this._updateDateTime());
+        this._connectSetting('large-clock-show-date', () => this._syncDateVisibility());
     }
 
     disable() {
@@ -58,12 +56,20 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
 
         super.disable();
 
+        this._card = null;
         this._dateLabel = null;
         this._timeLabel = null;
     }
 
     _buildActor() {
         this._createRootActor('nothing-large-clock-widget');
+
+        this._card = new St.Widget({
+            style_class: 'nothing-large-clock-card',
+            layout_manager: new Clutter.BinLayout(),
+            x_expand: true,
+            y_expand: true,
+        });
 
         const content = new St.BoxLayout({
             style_class: 'nothing-large-clock-content',
@@ -85,7 +91,9 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
 
         content.add_child(this._dateLabel);
         content.add_child(this._timeLabel);
-        this._actor.add_child(content);
+        this._card.add_child(content);
+        this._actor.add_child(this._card);
+        this._registerBackgroundActor(this._card);
 
         this._addResizeHandle('nothing-widget-resize-handle');
     }
@@ -118,7 +126,7 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
     }
 
     _applySizeStyles() {
-        if (!this._actor || !this._dateLabel || !this._timeLabel)
+        if (!this._actor || !this._card || !this._dateLabel || !this._timeLabel)
             return;
 
         const width = this._actor.width || this._config.defaultWidth;
@@ -127,8 +135,14 @@ export class LargeDigitalClockDesktopWidget extends DesktopWidget {
         const scale = clamp(Math.min(width / this._config.defaultWidth, height / this._config.defaultHeight), 0.65, 1.7);
         const dateSize = Math.round(20 * scale);
         const timeSize = Math.round((showDate ? 88 : 104) * scale);
+        const padding = Math.round(18 * scale);
+        const radius = Math.round(20 * scale);
 
-        this._dateLabel.set_style(`font-size: ${dateSize}px;`);
-        this._timeLabel.set_style(`font-size: ${timeSize}px;`);
+        this._setInlineStyleProperty(this._card, 'padding', `${padding}px`);
+        this._setInlineStyleProperty(this._card, 'border-radius', `${radius}px`);
+        this._setInlineStyleProperty(this._dateLabel, 'font-size', `${dateSize}px`);
+        this._setInlineStyleProperty(this._timeLabel, 'font-size', `${timeSize}px`);
+        this._applyCustomAccentStyles();
+        this._applyOpacity();
     }
 }

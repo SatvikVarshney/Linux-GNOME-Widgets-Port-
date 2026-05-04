@@ -5,6 +5,7 @@ import Meta from 'gi://Meta';
 import St from 'gi://St';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const THEME_DARK = 0;
 const THEME_LIGHT = 1;
@@ -52,6 +53,7 @@ const ACCENT_COLORS = [
 ];
 const CUSTOM_TEXT_ACCENT_CLASSES = [
     'nothing-date-day',
+    'nothing-large-clock-date',
     'nothing-world-clock-city',
     'nothing-world-clock-abbrev',
     'nothing-weather-symbol',
@@ -76,6 +78,7 @@ const WINDOW_TYPES_THAT_COVER_WIDGETS = [
 const LAYER_UPDATE_DELAYS_MS = [16, 120, 360, 900];
 const DEBUG_DESKTOP_WIDGETS = false;
 const DEBUG_FILE_PATH = '/tmp/gnomewidgets-debug.log';
+const EXTENSION_UUID = 'linuxgnomewidgets@project';
 
 let debugFileInitialized = false;
 
@@ -89,6 +92,15 @@ function readSetting(readValue, key, fallback) {
     } catch (error) {
         log(`GNOME Widgets: missing or invalid setting ${key}: ${error}`);
         return fallback;
+    }
+}
+
+function hasSetting(settings, key) {
+    try {
+        return settings.settings_schema?.has_key(key) ?? true;
+    } catch (error) {
+        log(`GNOME Widgets: failed to inspect setting ${key}: ${error}`);
+        return false;
     }
 }
 
@@ -110,6 +122,10 @@ function hexToRgba(hex, alpha = 0.95) {
         parseInt(normalized.slice(5, 7), 16) / 255,
         alpha,
     ];
+}
+
+function formatCssRgba(red, green, blue, alpha) {
+    return `rgba(${red}, ${green}, ${blue}, ${alpha.toFixed(3)})`;
 }
 
 function updateInlineStyle(style, property, value) {
@@ -166,6 +182,8 @@ export class DesktopWidget {
 
         this._actor = null;
         this._inputActor = null;
+        this._contextMenu = null;
+        this._contextMenuManager = null;
         this._resizeHandle = null;
         this._desktopLayer = null;
         this._inputLayer = null;
@@ -190,6 +208,8 @@ export class DesktopWidget {
         this._overviewSignalIds = [];
         this._windowSignalIds = new Map();
         this._layerUpdateTimeoutIds = [];
+        this._backgroundActors = [];
+        this._backgroundStyleColor = null;
         this._lastLayerUpdateReason = 'startup';
 
         this._interfaceSettings = null;
@@ -206,30 +226,23 @@ export class DesktopWidget {
         this._debug('enable');
         this._addToDesktopLayer();
 
+        this._applyThemeClasses();
         this._restoreSize();
         this._restorePosition();
-        this._applyThemeClasses();
         this._applySizeStyles();
         this._applyCustomAccentStyles();
+        this._applyOpacity();
         this._connectDesktopSignals();
         this._queueLayerUpdate('enable');
 
-        this._settingsSignalIds.push(
-            this._settings.connect(`changed::${this._config.themeKey ?? 'theme-mode'}`, () => this._applyThemeClasses())
-        );
-        this._settingsSignalIds.push(
-            this._settings.connect(`changed::${this._config.accentKey ?? 'use-system-accent'}`, () => this._applyThemeClasses())
-        );
-        if (this._config.accentColorKey) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${this._config.accentColorKey}`, () => this._applyThemeClasses())
-            );
-        }
-        if (this._config.customColorKey) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${this._config.customColorKey}`, () => this._applyThemeClasses())
-            );
-        }
+        this._connectSetting(this._config.themeKey ?? 'theme-mode', () => this._applyThemeClasses());
+        this._connectSetting(this._config.accentKey ?? 'use-system-accent', () => this._applyThemeClasses());
+        if (this._config.accentColorKey)
+            this._connectSetting(this._config.accentColorKey, () => this._applyThemeClasses());
+        if (this._config.customColorKey)
+            this._connectSetting(this._config.customColorKey, () => this._applyThemeClasses());
+        if (this._config.opacityKey)
+            this._connectSetting(this._config.opacityKey, () => this._applyOpacity());
 
         this._monitorSignalId = Main.layoutManager.connect('monitors-changed', () => {
             this._restoreSize();
@@ -305,9 +318,17 @@ export class DesktopWidget {
             this._inputActor = null;
         }
 
+        if (this._contextMenu) {
+            this._contextMenu.destroy();
+            this._contextMenu = null;
+        }
+        this._contextMenuManager = null;
+
         this._desktopLayer = null;
         this._inputLayer = null;
         this._resizeHandle = null;
+        this._backgroundActors = [];
+        this._backgroundStyleColor = null;
         this._isDragging = false;
         this._isResizing = false;
     }
@@ -585,6 +606,9 @@ export class DesktopWidget {
     _onButtonPress(event) {
         this._debugPointerEvent('button-press-signal', event);
 
+        if (this._handleContextMenuClick(event))
+            return Clutter.EVENT_STOP;
+
         if (!this._canStartPointerAction(event)) {
             this._debugPointerReject('button-press-signal', event);
             return Clutter.EVENT_PROPAGATE;
@@ -617,10 +641,16 @@ export class DesktopWidget {
         if (this._isDragging || this._isResizing)
             return this._handleActivePointerAction(event, eventType);
 
-        if (eventType !== Clutter.EventType.BUTTON_PRESS || event.get_button() !== 1)
+        if (eventType !== Clutter.EventType.BUTTON_PRESS)
             return Clutter.EVENT_PROPAGATE;
 
         this._debugPointerEvent('captured-button-press', event);
+
+        if (this._handleContextMenuClick(event))
+            return Clutter.EVENT_STOP;
+
+        if (event.get_button() !== 1)
+            return Clutter.EVENT_PROPAGATE;
 
         if (!this._canStartPointerAction(event)) {
             this._debugPointerReject('captured-button-press', event);
@@ -754,6 +784,73 @@ export class DesktopWidget {
         return this._config.resizable !== false && this._resizeHandle !== null;
     }
 
+    refresh() {
+    }
+
+    _handleContextMenuClick(event) {
+        if (event.get_button() !== 3 || !this._actor?.visible || this._isOverviewVisible())
+            return false;
+
+        const [stageX, stageY] = event.get_coords();
+        if (!this._isPointInsideWidget(stageX, stageY) || this._isPointCoveredByAppWindow(stageX, stageY))
+            return false;
+
+        this._openContextMenu();
+        return true;
+    }
+
+    _openContextMenu() {
+        this._ensureContextMenu();
+        this._contextMenu.open();
+    }
+
+    _ensureContextMenu() {
+        if (this._contextMenu)
+            return;
+
+        this._contextMenu = new PopupMenu.PopupMenu(this._actor, 0.5, St.Side.TOP);
+        this._contextMenuManager = new PopupMenu.PopupMenuManager(this._actor);
+        this._contextMenuManager.addMenu(this._contextMenu);
+        this._contextMenu.actor.add_style_class_name('nothing-widget-context-menu');
+        this._contextMenu.connect('open-state-changed', (_menu, open) => {
+            if (!open)
+                this._queueLayerUpdate('context-menu-closed');
+        });
+        Main.uiGroup.add_child(this._contextMenu.actor);
+        this._contextMenu.actor.hide();
+
+        if (this._config.refreshable === true) {
+            const refreshItem = new PopupMenu.PopupMenuItem('Refresh');
+            refreshItem.connect('activate', () => this.refresh());
+            this._contextMenu.addMenuItem(refreshItem);
+            this._contextMenu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        }
+
+        const preferencesItem = new PopupMenu.PopupMenuItem('Preferences');
+        preferencesItem.connect('activate', () => this._openPreferences());
+        this._contextMenu.addMenuItem(preferencesItem);
+    }
+
+    _openPreferences() {
+        try {
+            GLib.spawn_command_line_async(`gnome-extensions prefs ${EXTENSION_UUID}`);
+        } catch (error) {
+            log(`GNOME Widgets: failed to open preferences: ${error}`);
+        }
+    }
+
+    _isPointInsideActor(stageX, stageY, actor) {
+        if (!actor || !actor.visible)
+            return false;
+
+        const [actorX, actorY] = actor.get_transformed_position();
+        const [actorWidth, actorHeight] = actor.get_transformed_size();
+        return stageX >= actorX &&
+            stageX <= actorX + actorWidth &&
+            stageY >= actorY &&
+            stageY <= actorY + actorHeight;
+    }
+
     _isPointCoveredByAppWindow(stageX, stageY) {
         const activeWorkspace = global.workspace_manager.get_active_workspace();
 
@@ -859,6 +956,7 @@ export class DesktopWidget {
         this._actor.set_size(clampedWidth, clampedHeight);
         this._applySizeStyles();
         this._applyCustomAccentStyles();
+        this._applyOpacity();
         this._syncInputLayer();
         this._setPosition(this._actor.x, this._actor.y, false);
 
@@ -869,6 +967,42 @@ export class DesktopWidget {
     }
 
     _applySizeStyles() {
+    }
+
+    _registerBackgroundActor(actor) {
+        if (!actor || this._backgroundActors.includes(actor))
+            return actor;
+
+        this._backgroundActors.push(actor);
+        if (this._backgroundStyleColor)
+            this._setInlineStyleProperty(actor, 'background-color', this._backgroundStyleColor);
+        return actor;
+    }
+
+    _applyOpacity() {
+        if (!this._actor)
+            return;
+
+        const opacityPercent = this._getIntSetting(this._config.opacityKey ?? 'widget-opacity', 100);
+        const alpha = clamp(opacityPercent, 20, 100) / 100;
+        const [red, green, blue] = this._isLightThemeEnabled()
+            ? [245, 245, 245]
+            : [26, 26, 26];
+        const backgroundColor = formatCssRgba(red, green, blue, alpha);
+
+        this._backgroundStyleColor = backgroundColor;
+        this._actor.opacity = 255;
+        for (const actor of this._backgroundActors) {
+            this._setInlineStyleProperty(actor, 'background-color', backgroundColor);
+        }
+    }
+
+    _setInlineStyleProperty(actor, property, value) {
+        if (!actor)
+            return;
+
+        const currentStyle = actor.get_style?.() ?? actor.style ?? '';
+        actor.set_style(updateInlineStyle(currentStyle, property, value));
     }
 
     _isLightThemeEnabled() {
@@ -914,6 +1048,7 @@ export class DesktopWidget {
 
         this._actor.set_style_class_name(filteredClassNames.join(' '));
         this._applyCustomAccentStyles();
+        this._applyOpacity();
     }
 
     _getAccentHex() {
@@ -952,8 +1087,7 @@ export class DesktopWidget {
             (!classNames.includes('nothing-media-button') || classNames.includes('primary'));
 
         if (isTarget) {
-            const currentStyle = actor.get_style?.() ?? actor.style ?? '';
-            actor.set_style(updateInlineStyle(currentStyle, property, value));
+            this._setInlineStyleProperty(actor, property, value);
         }
 
         for (const child of actor.get_children?.() ?? [])
@@ -974,6 +1108,22 @@ export class DesktopWidget {
 
     _getDoubleSetting(key, fallback) {
         return readSetting(() => this._settings.get_double(key), key, fallback);
+    }
+
+    _connectSetting(key, callback) {
+        if (!hasSetting(this._settings, key)) {
+            log(`GNOME Widgets: skipping signal for missing setting ${key}`);
+            return 0;
+        }
+
+        try {
+            const signalId = this._settings.connect(`changed::${key}`, callback);
+            this._settingsSignalIds.push(signalId);
+            return signalId;
+        } catch (error) {
+            log(`GNOME Widgets: failed to connect setting ${key}: ${error}`);
+            return 0;
+        }
     }
 
     _debug(message) {

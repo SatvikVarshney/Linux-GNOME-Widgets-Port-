@@ -18,11 +18,13 @@ const WEATHER_WIDGET_CONFIG = {
     accentKey: 'weather-use-system-accent',
     accentColorKey: 'weather-accent-color',
     customColorKey: 'weather-custom-accent-color',
+    opacityKey: 'weather-opacity',
     xKey: 'weather-x',
     yKey: 'weather-y',
     widthKey: 'weather-width',
     heightKey: 'weather-height',
     resizable: true,
+    refreshable: true,
 };
 
 const TEMPERATURE_CELSIUS = 0;
@@ -88,6 +90,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
 
         this._session = new Soup.Session();
         this._refreshTimeoutId = 0;
+        this._failureRetryTimeoutId = 0;
         this._requestSerial = 0;
 
         this._card = null;
@@ -116,9 +119,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
             'weather-time-zone',
             'weather-temperature-unit',
         ]) {
-            this._settingsSignalIds.push(
-                this._settings.connect(`changed::${key}`, () => this._fetchWeather())
-            );
+            this._connectSetting(key, () => this._fetchWeather());
         }
     }
 
@@ -126,6 +127,11 @@ export class WeatherDesktopWidget extends DesktopWidget {
         if (this._refreshTimeoutId) {
             GLib.Source.remove(this._refreshTimeoutId);
             this._refreshTimeoutId = 0;
+        }
+
+        if (this._failureRetryTimeoutId) {
+            GLib.Source.remove(this._failureRetryTimeoutId);
+            this._failureRetryTimeoutId = 0;
         }
 
         super.disable();
@@ -190,9 +196,14 @@ export class WeatherDesktopWidget extends DesktopWidget {
         this._card.add_child(this._highLowLabel);
         this._card.add_child(this._statusLabel);
         this._actor.add_child(this._card);
+        this._registerBackgroundActor(this._card);
 
         this._addResizeHandle('nothing-widget-resize-handle');
         this._setLoadingState();
+    }
+
+    refresh() {
+        this._fetchWeather();
     }
 
     _fetchWeather() {
@@ -296,7 +307,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
             try {
                 const bytes = this._session.send_and_read_finish(result);
                 if (message.get_status() !== Soup.Status.OK) {
-                    this._setErrorState('Network error');
+                    this._setErrorState('Network error', true);
                     return;
                 }
 
@@ -304,7 +315,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
                 callback(JSON.parse(text));
             } catch (error) {
                 log(`GNOME Widgets: failed weather request: ${error}`);
-                this._setErrorState('Weather error');
+                this._setErrorState('Weather error', true);
             }
         });
     }
@@ -332,6 +343,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
         if (!this._statusLabel)
             return;
 
+        this._clearFailureRetry();
         this._symbolLabel.text = '☁';
         this._temperatureLabel.text = '--°';
         this._locationLabel.text = this._getStringSetting('weather-location-name', '') ||
@@ -342,7 +354,7 @@ export class WeatherDesktopWidget extends DesktopWidget {
         this._statusLabel.text = '';
     }
 
-    _setErrorState(message) {
+    _setErrorState(message, retry = false) {
         if (!this._statusLabel)
             return;
 
@@ -350,13 +362,19 @@ export class WeatherDesktopWidget extends DesktopWidget {
         this._temperatureLabel.text = '--°';
         this._conditionLabel.text = message;
         this._highLowLabel.text = '';
-        this._statusLabel.text = 'Open preferences to adjust location';
+        this._statusLabel.text = retry ? 'Retrying automatically' : 'Open preferences to adjust location';
+
+        if (retry)
+            this._scheduleFailureRetry();
+        else
+            this._clearFailureRetry();
     }
 
     _setWeatherState(data) {
         if (!this._statusLabel)
             return;
 
+        this._clearFailureRetry();
         const unitSymbol = this._getIntSetting('weather-temperature-unit', TEMPERATURE_FAHRENHEIT) === TEMPERATURE_CELSIUS ? '°C' : '°F';
         this._symbolLabel.text = getWeatherSymbol(data.code);
         this._temperatureLabel.text = `${data.temperature}°`;
@@ -364,6 +382,25 @@ export class WeatherDesktopWidget extends DesktopWidget {
         this._conditionLabel.text = getWeatherCondition(data.code);
         this._highLowLabel.text = `H ${data.high}${unitSymbol}   L ${data.low}${unitSymbol}`;
         this._statusLabel.text = 'Open-Meteo';
+    }
+
+    _scheduleFailureRetry() {
+        if (this._failureRetryTimeoutId)
+            return;
+
+        this._failureRetryTimeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2 * 60, () => {
+            this._failureRetryTimeoutId = 0;
+            this._fetchWeather();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    _clearFailureRetry() {
+        if (!this._failureRetryTimeoutId)
+            return;
+
+        GLib.Source.remove(this._failureRetryTimeoutId);
+        this._failureRetryTimeoutId = 0;
     }
 
     _applySizeStyles() {

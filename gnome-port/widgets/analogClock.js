@@ -17,6 +17,7 @@ const ANALOG_CLOCK_WIDGET_CONFIG = {
     accentKey: 'analog-clock-use-system-accent',
     accentColorKey: 'analog-clock-accent-color',
     customColorKey: 'analog-clock-custom-accent-color',
+    opacityKey: 'analog-clock-opacity',
     xKey: 'analog-clock-x',
     yKey: 'analog-clock-y',
     widthKey: 'analog-clock-width',
@@ -47,12 +48,10 @@ export class AnalogClockDesktopWidget extends DesktopWidget {
             return GLib.SOURCE_CONTINUE;
         });
 
-        this._settingsSignalIds.push(
-            this._settings.connect('changed::analog-clock-style', () => {
-                this._applyStyleVariant();
-                this._applySizeStyles();
-            })
-        );
+        this._connectSetting('analog-clock-style', () => {
+            this._applyStyleVariant();
+            this._applySizeStyles();
+        });
     }
 
     disable() {
@@ -102,6 +101,7 @@ export class AnalogClockDesktopWidget extends DesktopWidget {
         this._face.add_child(this._secondDot);
         this._face.add_child(this._centerDot);
         this._actor.add_child(this._face);
+        this._registerBackgroundActor(this._face);
 
         this._addResizeHandle('nothing-widget-resize-handle');
         this._applyStyleVariant();
